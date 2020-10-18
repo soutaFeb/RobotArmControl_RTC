@@ -22,7 +22,7 @@ void loop() {
   if (Serial.available() > 2) {
     for(int i=0;i<3;i++){
       angle = Serial.read();
-      //if(switchDirection[i])angle = 180 - angle;
+      if(switchDirection[i])angle = 180 - angle;
       servo[i].write(angle);
     }
   }
