@@ -117,7 +117,7 @@ The ports provided by the component are described below:
 =============== =========== ============================== =======
 Name            Type        Data type                      Purpose
 =============== =========== ============================== =======
-angle_input     InPort      RTC::TimedLongSeq              
+angle_input     InPort      RTC::TimedDoubleSeq            
 =============== =========== ============================== =======
 
 Examples

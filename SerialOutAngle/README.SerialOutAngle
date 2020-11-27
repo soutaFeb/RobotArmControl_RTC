@@ -64,7 +64,7 @@ Lang Type:
 	PortNumber:  0
 	Description: 
 	PortType: 
-	DataType:    RTC::TimedLongSeq
+	DataType:    RTC::TimedDoubleSeq
 	MaxOut: 
 	[Data Elements]
 		Name:

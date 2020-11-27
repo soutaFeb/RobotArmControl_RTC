@@ -78,8 +78,26 @@ Lang Type:
 		RangeHigh:
 		DefaultValue:
 
-	Name:        position_input
+	Name:        customVal_input
 	PortNumber:  1
+	Description: 
+	PortType: 
+	DataType:    RTC::TimedLong
+	MaxOut: 
+	[Data Elements]
+		Name:
+		Type:            
+		Number:          
+		Semantics:       
+		Unit:            
+		Frequency:       
+		Operation Cycle: 
+		RangeLow:
+		RangeHigh:
+		DefaultValue:
+
+	Name:        position_input
+	PortNumber:  2
 	Description: 
 	PortType: 
 	DataType:    RTC::TimedDoubleSeq
@@ -108,7 +126,25 @@ Lang Type:
 	PortNumber:  0
 	Description: 
 	PortType: 
-	DataType:    RTC::TimedChar
+	DataType:    RTC::TimedLong
+	MaxOut: 
+	[Data Elements]
+		Name:
+		Type:            
+		Number:          
+		Semantics:       
+		Unit:            
+		Frequency:       
+		Operation Cycle: 
+		RangeLow:
+		RangeHigh:
+		DefaultValue:
+
+	Name:        customSignal_output
+	PortNumber:  1
+	Description: 
+	PortType: 
+	DataType:    RTC::TimedLong
 	MaxOut: 
 	[Data Elements]
 		Name:
@@ -123,10 +159,10 @@ Lang Type:
 		DefaultValue:
 
 	Name:        angle_output
-	PortNumber:  1
+	PortNumber:  2
 	Description: 
 	PortType: 
-	DataType:    RTC::TimedLongSeq
+	DataType:    RTC::TimedDoubleSeq
 	MaxOut: 
 	[Data Elements]
 		Name:
@@ -141,7 +177,7 @@ Lang Type:
 		DefaultValue:
 
 	Name:        targetPos_output
-	PortNumber:  2
+	PortNumber:  3
 	Description: 
 	PortType: 
 	DataType:    RTC::TimedDoubleSeq
@@ -200,7 +236,7 @@ Lang Type:
 		Name:             innerLimitRadius
 		Description:     
 		Type:            double
-		DefaultValue:     100.0
+		DefaultValue:     500.0
 		Unit:            
 		Range:           
 		Constraint:      
@@ -229,26 +265,18 @@ Lang Type:
 		Range:           
 		Constraint:      
 
-		Name:             showAutoButton
+		Name:             auxiliaryLineInterval
 		Description:     
-		Type:            int
-		DefaultValue:     1
+		Type:            double
+		DefaultValue:     45.0
 		Unit:            
 		Range:           
 		Constraint:      
 
-		Name:             auxiliaryLineNum
+		Name:             auxiliaryArcInterval
 		Description:     
-		Type:            int
-		DefaultValue:     3
-		Unit:            
-		Range:           
-		Constraint:      
-
-		Name:             auxiliaryArcNum
-		Description:     
-		Type:            int
-		DefaultValue:     3
+		Type:            double
+		DefaultValue:     100.0
 		Unit:            
 		Range:           
 		Constraint:      
@@ -305,6 +333,78 @@ Lang Type:
 		Description:     
 		Type:            int
 		DefaultValue:     50
+		Unit:            
+		Range:           
+		Constraint:      
+
+		Name:             showAutoButton
+		Description:     
+		Type:            int
+		DefaultValue:     1
+		Unit:            
+		Range:           
+		Constraint:      
+
+		Name:             showCustomButton
+		Description:     
+		Type:            int
+		DefaultValue:     0
+		Unit:            
+		Range:           
+		Constraint:      
+
+		Name:             custom_name
+		Description:     
+		Type:            string
+		DefaultValue:     custom
+		Unit:            
+		Range:           
+		Constraint:      
+
+		Name:             custom_alternateOperation
+		Description:     
+		Type:            int
+		DefaultValue:     0
+		Unit:            
+		Range:           
+		Constraint:      
+
+		Name:             custom_linkWithRightClick
+		Description:     
+		Type:            int
+		DefaultValue:     0
+		Unit:            
+		Range:           
+		Constraint:      
+
+		Name:             custom_pushVal
+		Description:     
+		Type:            int
+		DefaultValue:     1
+		Unit:            
+		Range:           
+		Constraint:      
+
+		Name:             custom_pressVal
+		Description:     
+		Type:            int
+		DefaultValue:     2
+		Unit:            
+		Range:           
+		Constraint:      
+
+		Name:             custom_releaseVal
+		Description:     
+		Type:            int
+		DefaultValue:     3
+		Unit:            
+		Range:           
+		Constraint:      
+
+		Name:             custom_showInputVal
+		Description:     
+		Type:            int
+		DefaultValue:     0
 		Unit:            
 		Range:           
 		Constraint:      

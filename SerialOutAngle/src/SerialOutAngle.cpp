@@ -13,11 +13,13 @@
 #include <tchar.h>
 
 HANDLE arduino;
-bool Ret;
 BYTE data = 0;
-int angU = 0;
-int angL = 0;
-int angS = 0;
+int angU_upper = 0;
+int angU_lower = 0;
+int angL_upper = 0;
+int angL_lower = 0;
+int angS_upper = 0;
+int angS_lower = 0;
 
 // Module specification
 // <rtc-template block="module_spec">
@@ -118,14 +120,12 @@ RTC::ReturnCode_t SerialOutAngle::onShutdown(RTC::UniqueId ec_id)
 
 RTC::ReturnCode_t SerialOutAngle::onActivated(RTC::UniqueId ec_id)
 {
-	
   return RTC::RTC_OK;
 }
 
 
 RTC::ReturnCode_t SerialOutAngle::onDeactivated(RTC::UniqueId ec_id)
 {
-	
   return RTC::RTC_OK;
 }
 
@@ -135,11 +135,14 @@ RTC::ReturnCode_t SerialOutAngle::onExecute(RTC::UniqueId ec_id)
 	m_angle_input.data.length(3);
 	if (m_angle_inputIn.isNew()) {
 		m_angle_inputIn.read();
-		angU = m_angle_input.data[0];
-		angL = m_angle_input.data[1];
-		angS = m_angle_input.data[2];
+		angU_upper = int(m_angle_input.data[0] / 10);
+		angL_upper = int(m_angle_input.data[1] / 10);
+		angS_upper = int(m_angle_input.data[2] / 10);
+		angU_lower = int(m_angle_input.data[0] * 10) % 100;
+		angL_lower = int(m_angle_input.data[1] * 10) % 100;
+		angS_lower = int(m_angle_input.data[2] * 10) % 100;
 
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 6; i++) {
 			//ポートをオープン
 			char name[50] = {};
 			for (int i = 0; i < 50; i++) {
@@ -170,9 +173,12 @@ RTC::ReturnCode_t SerialOutAngle::onExecute(RTC::UniqueId ec_id)
 			SetCommState(arduino, &dcb);
 
 			switch (i) {
-			case 0:data = angU; break;
-			case 1:data = angL; break;
-			case 2:data = angS; break;
+			case 0:data = angU_upper; break;
+			case 1:data = angU_lower; break;
+			case 2:data = angL_upper; break;
+			case 3:data = angL_lower; break; 
+			case 4:data = angS_upper; break;
+			case 5:data = angS_lower; break;
 			}
 
 			//送信

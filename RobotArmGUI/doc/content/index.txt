@@ -109,13 +109,12 @@ Parameter        Data type          Default Value    Effect
 upperArmLength   double             300.0            
 lowerArmLength   double             300.0            
 outerLimitRadius double             500.0            
-innerLimitRadius double             100.0            
+innerLimitRadius double             500.0            
 showSideView     int                1                
 showCoordinates  int                1                
 showCoordinateAxes int                1                
-showAutoButton   int                1                
-auxiliaryLineNum int                3                
-auxiliaryArcNum  int                3                
+auxiliaryLineInterval double             45.0             
+auxiliaryArcInterval double             100.0            
 wheelRate        double             10.0             
 switchWheelDirection int                0                
 accentColor_R    int                255              
@@ -123,6 +122,15 @@ accentColor_G    int                0
 accentColor_B    int                0                
 backgroundBrightness int                0                
 arcBrightness    int                50               
+showAutoButton   int                1                
+showCustomButton int                0                
+custom_name      string             custom           
+custom_alternateOperation int                0                
+custom_linkWithRightClick int                0                
+custom_pushVal   int                1                
+custom_pressVal  int                2                
+custom_releaseVal int                3                
+custom_showInputVal int                0                
 ================ ================== ================ ======
 
 Ports
@@ -134,9 +142,11 @@ The ports provided by the component are described below:
 Name            Type        Data type                      Purpose
 =============== =========== ============================== =======
 targetPos_input InPort      RTC::TimedDoubleSeq            
+customVal_input InPort      RTC::TimedLong                 
 position_input  InPort      RTC::TimedDoubleSeq            
-autoSignal_output OutPort     RTC::TimedChar                 
-angle_output    OutPort     RTC::TimedLongSeq              
+autoSignal_output OutPort     RTC::TimedLong                 
+customSignal_output OutPort     RTC::TimedLong                 
+angle_output    OutPort     RTC::TimedDoubleSeq            
 targetPos_output OutPort     RTC::TimedDoubleSeq            
 =============== =========== ============================== =======
 

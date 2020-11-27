@@ -222,10 +222,10 @@ class SerialOutAngle
 
   // DataInPort declaration
   // <rtc-template block="inport_declare">
-  RTC::TimedLongSeq m_angle_input;
+  RTC::TimedDoubleSeq m_angle_input;
   /*!
    */
-  RTC::InPort<RTC::TimedLongSeq> m_angle_inputIn;
+  RTC::InPort<RTC::TimedDoubleSeq> m_angle_inputIn;
   
   // </rtc-template>
 

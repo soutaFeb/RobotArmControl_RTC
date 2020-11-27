@@ -248,7 +248,7 @@ class RobotArmGUITest
   /*!
    * 
    * - Name:  innerLimitRadius
-   * - DefaultValue: 100.0
+   * - DefaultValue: 500.0
    */
   double m_innerLimitRadius;
   /*!
@@ -271,22 +271,16 @@ class RobotArmGUITest
   int m_showCoordinateAxes;
   /*!
    * 
-   * - Name:  showAutoButton
-   * - DefaultValue: 1
+   * - Name:  auxiliaryLineInterval
+   * - DefaultValue: 45.0
    */
-  int m_showAutoButton;
+  double m_auxiliaryLineInterval;
   /*!
    * 
-   * - Name:  auxiliaryLineNum
-   * - DefaultValue: 3
+   * - Name:  auxiliaryArcInterval
+   * - DefaultValue: 100.0
    */
-  int m_auxiliaryLineNum;
-  /*!
-   * 
-   * - Name:  auxiliaryArcNum
-   * - DefaultValue: 3
-   */
-  int m_auxiliaryArcNum;
+  double m_auxiliaryArcInterval;
   /*!
    * 
    * - Name:  wheelRate
@@ -329,19 +323,77 @@ class RobotArmGUITest
    * - DefaultValue: 50
    */
   int m_arcBrightness;
+  /*!
+   * 
+   * - Name:  showAutoButton
+   * - DefaultValue: 1
+   */
+  int m_showAutoButton;
+  /*!
+   * 
+   * - Name:  showCustomButton
+   * - DefaultValue: 0
+   */
+  int m_showCustomButton;
+  /*!
+   * 
+   * - Name:  custom_name
+   * - DefaultValue: custom
+   */
+  std::string m_custom_name;
+  /*!
+   * 
+   * - Name:  custom_alternateOperation
+   * - DefaultValue: 0
+   */
+  int m_custom_alternateOperation;
+  /*!
+   * 
+   * - Name:  custom_linkWithRightClick
+   * - DefaultValue: 0
+   */
+  int m_custom_linkWithRightClick;
+  /*!
+   * 
+   * - Name:  custom_pushVal
+   * - DefaultValue: 1
+   */
+  int m_custom_pushVal;
+  /*!
+   * 
+   * - Name:  custom_pressVal
+   * - DefaultValue: 2
+   */
+  int m_custom_pressVal;
+  /*!
+   * 
+   * - Name:  custom_releaseVal
+   * - DefaultValue: 3
+   */
+  int m_custom_releaseVal;
+  /*!
+   * 
+   * - Name:  custom_showInputVal
+   * - DefaultValue: 0
+   */
+  int m_custom_showInputVal;
 
   // </rtc-template>
 
   // DataInPort declaration
   // <rtc-template block="inport_declare">
-  RTC::TimedChar m_autoSignal_output;
+  RTC::TimedLong m_autoSignal_output;
   /*!
    */
-  RTC::InPort<RTC::TimedChar> m_autoSignal_outputIn;
-  RTC::TimedLongSeq m_angle_output;
+  RTC::InPort<RTC::TimedLong> m_autoSignal_outputIn;
+  RTC::TimedLong m_customSignal_output;
   /*!
    */
-  RTC::InPort<RTC::TimedLongSeq> m_angle_outputIn;
+  RTC::InPort<RTC::TimedLong> m_customSignal_outputIn;
+  RTC::TimedDoubleSeq m_angle_output;
+  /*!
+   */
+  RTC::InPort<RTC::TimedDoubleSeq> m_angle_outputIn;
   RTC::TimedDoubleSeq m_targetPos_output;
   /*!
    */
@@ -356,6 +408,10 @@ class RobotArmGUITest
   /*!
    */
   RTC::OutPort<RTC::TimedDoubleSeq> m_targetPos_inputOut;
+  RTC::TimedLong m_customVal_input;
+  /*!
+   */
+  RTC::OutPort<RTC::TimedLong> m_customVal_inputOut;
   RTC::TimedDoubleSeq m_position_input;
   /*!
    */

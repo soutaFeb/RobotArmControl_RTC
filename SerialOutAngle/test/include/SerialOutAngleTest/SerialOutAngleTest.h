@@ -244,10 +244,10 @@ class SerialOutAngleTest
 
   // DataOutPort declaration
   // <rtc-template block="outport_declare">
-  RTC::TimedLongSeq m_angle_input;
+  RTC::TimedDoubleSeq m_angle_input;
   /*!
    */
-  RTC::OutPort<RTC::TimedLongSeq> m_angle_inputOut;
+  RTC::OutPort<RTC::TimedDoubleSeq> m_angle_inputOut;
   
   // </rtc-template>
 
