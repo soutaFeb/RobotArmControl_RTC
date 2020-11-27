@@ -113,6 +113,10 @@ RTC::ReturnCode_t RobotArmAutomaticController::onShutdown(RTC::UniqueId ec_id)
 
 RTC::ReturnCode_t RobotArmAutomaticController::onActivated(RTC::UniqueId ec_id)
 {
+    m_targetPos_output.data.length(1);
+    m_targetPos_output.data[0] = 3;//データファイルの数をGUIコンポーネントに送る
+    m_targetPos_outputOut.write();
+
     ifstream file1("data1.dat");
     while (file1 >> value[0][allNum[0]]) {// スペースで区切られた値を読み込む
         allNum[0]++;
@@ -135,13 +139,6 @@ RTC::ReturnCode_t RobotArmAutomaticController::onActivated(RTC::UniqueId ec_id)
             posY[i][j] = value[i][j * 3 + 2];
             posZ[i][j] = value[i][j * 3 + 3];
         }
-    }
-
-    cout << "allNum : " << allNum[1] << endl;
-    cout << "dataNum : " << dataNum[1] << endl;
-    cout << "moveInterval : " << moveInterval[1] << endl;
-    for (int i = 0; i < dataNum[1]; i++) {
-        cout << posX[1][i] << "," << posY[1][i] << "," << posZ[1][i] << endl;
     }
 
   return RTC::RTC_OK;

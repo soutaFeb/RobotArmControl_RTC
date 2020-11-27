@@ -242,10 +242,10 @@ class RobotArmAutomaticControllerTest
 
   // DataOutPort declaration
   // <rtc-template block="outport_declare">
-  RTC::TimedChar m_autoSignal_input;
+  RTC::TimedLong m_autoSignal_input;
   /*!
    */
-  RTC::OutPort<RTC::TimedChar> m_autoSignal_inputOut;
+  RTC::OutPort<RTC::TimedLong> m_autoSignal_inputOut;
   
   // </rtc-template>
 

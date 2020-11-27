@@ -216,10 +216,10 @@ class RobotArmAutomaticController
 
   // DataInPort declaration
   // <rtc-template block="inport_declare">
-  RTC::TimedChar m_autoSignal_input;
+  RTC::TimedLong m_autoSignal_input;
   /*!
    */
-  RTC::InPort<RTC::TimedChar> m_autoSignal_inputIn;
+  RTC::InPort<RTC::TimedLong> m_autoSignal_inputIn;
   
   // </rtc-template>
 
