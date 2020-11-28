@@ -13,7 +13,7 @@
 - OS：Windows10
 ## コンポーネント群
 - RobotArmGUI：手先位置から関節角度計算,アームの状態を表示。DXライブラリを利用
-- AccelerationControl：手先の移動速度を制御
+- AccelerationController：手先の移動速度を制御
 - SerialOutAngle：マイコンに各関節角度を送信
 - RobotArmCUI：キーボードで手先位置を指定
 - RobotArmAutomaticController：ファイルを読み込んで自動で手先位置を指定
