@@ -120,6 +120,8 @@ RTC::ReturnCode_t SerialOutAngle::onShutdown(RTC::UniqueId ec_id)
 
 RTC::ReturnCode_t SerialOutAngle::onActivated(RTC::UniqueId ec_id)
 {
+	std::cout << "SerialOutAngle ready!" << std::endl;
+
   return RTC::RTC_OK;
 }
 
