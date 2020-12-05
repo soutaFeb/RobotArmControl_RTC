@@ -118,8 +118,8 @@ The ports provided by the component are described below:
 =============== =========== ============================== =======
 Name            Type        Data type                      Purpose
 =============== =========== ============================== =======
-targetPos_input InPort      RTC::TimedDoubleSeq            
-position_output OutPort     RTC::TimedDoubleSeq            
+targetPos_input InPort      RTC::TimedPoint3D              
+position_output OutPort     RTC::TimedPoint3D              
 =============== =========== ============================== =======
 
 Examples

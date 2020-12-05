@@ -110,8 +110,8 @@ maxSpeed         double             20
 =============== =========== ============================== ====
 ポート名        ポート型    データ型                       意味
 =============== =========== ============================== ====
-targetPos_input InPort      RTC::TimedDoubleSeq            
-position_output OutPort     RTC::TimedDoubleSeq            
+targetPos_input InPort      RTC::TimedPoint3D              
+position_output OutPort     RTC::TimedPoint3D              
 =============== =========== ============================== ====
 
 例

@@ -21,7 +21,7 @@
 
 // Service Consumer stub headers
 // <rtc-template block="consumer_stub_h">
-#include "BasicDataTypeStub.h"
+#include "ExtendedDataTypesStub.h"
 
 // </rtc-template>
 
@@ -228,20 +228,22 @@ class AccelerationController
 
   // DataInPort declaration
   // <rtc-template block="inport_declare">
-  RTC::TimedDoubleSeq m_targetPos_input;
+  RTC::TimedPoint3D m_targetPos_input;
   /*!
+   * - Unit: mm
    */
-  RTC::InPort<RTC::TimedDoubleSeq> m_targetPos_inputIn;
+  RTC::InPort<RTC::TimedPoint3D> m_targetPos_inputIn;
   
   // </rtc-template>
 
 
   // DataOutPort declaration
   // <rtc-template block="outport_declare">
-  RTC::TimedDoubleSeq m_position_output;
+  RTC::TimedPoint3D m_position_output;
   /*!
+   * - Unit: mm
    */
-  RTC::OutPort<RTC::TimedDoubleSeq> m_position_outputOut;
+  RTC::OutPort<RTC::TimedPoint3D> m_position_outputOut;
   
   // </rtc-template>
 

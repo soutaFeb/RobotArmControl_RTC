@@ -16,7 +16,7 @@
 
 // Service implementation headers
 // <rtc-template block="service_impl_h">
-#include "BasicDataTypeSVC_impl.h"
+#include "ExtendedDataTypesSVC_impl.h"
 
 // </rtc-template>
 
@@ -244,20 +244,22 @@ class AccelerationControllerTest
 
   // DataInPort declaration
   // <rtc-template block="inport_declare">
-  RTC::TimedDoubleSeq m_position_output;
+  RTC::TimedPoint3D m_position_output;
   /*!
+   * - Unit: mm
    */
-  RTC::InPort<RTC::TimedDoubleSeq> m_position_outputIn;
+  RTC::InPort<RTC::TimedPoint3D> m_position_outputIn;
   
   // </rtc-template>
 
 
   // DataOutPort declaration
   // <rtc-template block="outport_declare">
-  RTC::TimedDoubleSeq m_targetPos_input;
+  RTC::TimedPoint3D m_targetPos_input;
   /*!
+   * - Unit: mm
    */
-  RTC::OutPort<RTC::TimedDoubleSeq> m_targetPos_inputOut;
+  RTC::OutPort<RTC::TimedPoint3D> m_targetPos_inputOut;
   
   // </rtc-template>
 
