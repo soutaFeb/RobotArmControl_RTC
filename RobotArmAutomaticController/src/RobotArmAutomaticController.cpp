@@ -113,8 +113,7 @@ RTC::ReturnCode_t RobotArmAutomaticController::onShutdown(RTC::UniqueId ec_id)
 
 RTC::ReturnCode_t RobotArmAutomaticController::onActivated(RTC::UniqueId ec_id)
 {
-    m_targetPos_output.data.length(1);
-    m_targetPos_output.data[0] = 3;//データファイルの数をGUIコンポーネントに送る
+    m_targetPos_output.data.x = 3;//データファイルの数をGUIコンポーネントに送る
     m_targetPos_outputOut.write();
 
     ifstream file1("data1.dat");
@@ -141,6 +140,8 @@ RTC::ReturnCode_t RobotArmAutomaticController::onActivated(RTC::UniqueId ec_id)
         }
     }
 
+    std::cout << "RobotArmAutomaticController ready!" << std::endl;
+
   return RTC::RTC_OK;
 }
 
@@ -159,19 +160,18 @@ RTC::ReturnCode_t RobotArmAutomaticController::onExecute(RTC::UniqueId ec_id)
         autoSignal = m_autoSignal_input.data;
 
         if (autoSignal > 0) {
-            m_targetPos_output.data.length(3);
             if (timeCount == 0) {
-                m_targetPos_output.data[0] = posX[autoSignal - 1][sendNum];
-                m_targetPos_output.data[1] = posY[autoSignal - 1][sendNum];
-                m_targetPos_output.data[2] = posZ[autoSignal - 1][sendNum];
+                m_targetPos_output.data.x = posX[autoSignal - 1][sendNum];
+                m_targetPos_output.data.y = posY[autoSignal - 1][sendNum];
+                m_targetPos_output.data.z = posZ[autoSignal - 1][sendNum];
                 sendNum++;
             }
             timeCount++;
             if (timeCount >= moveInterval[autoSignal - 1])timeCount = 0;
             if (sendNum > dataNum[autoSignal - 1]) {
-                m_targetPos_output.data[0] = 1000;
-                m_targetPos_output.data[1] = 1000;
-                m_targetPos_output.data[2] = 1000;
+                m_targetPos_output.data.x = 1000;
+                m_targetPos_output.data.y = 1000;
+                m_targetPos_output.data.z = 1000;
             }
             m_targetPos_outputOut.write();
         }

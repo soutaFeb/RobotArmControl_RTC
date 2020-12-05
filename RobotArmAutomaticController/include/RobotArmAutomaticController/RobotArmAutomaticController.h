@@ -22,6 +22,7 @@
 // Service Consumer stub headers
 // <rtc-template block="consumer_stub_h">
 #include "BasicDataTypeStub.h"
+#include "ExtendedDataTypesStub.h"
 
 // </rtc-template>
 
@@ -226,10 +227,11 @@ class RobotArmAutomaticController
 
   // DataOutPort declaration
   // <rtc-template block="outport_declare">
-  RTC::TimedDoubleSeq m_targetPos_output;
+  RTC::TimedPoint3D m_targetPos_output;
   /*!
+   * - Unit: mm
    */
-  RTC::OutPort<RTC::TimedDoubleSeq> m_targetPos_outputOut;
+  RTC::OutPort<RTC::TimedPoint3D> m_targetPos_outputOut;
   
   // </rtc-template>
 

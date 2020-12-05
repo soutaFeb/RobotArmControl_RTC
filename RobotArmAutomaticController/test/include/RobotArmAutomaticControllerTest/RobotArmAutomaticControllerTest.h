@@ -17,6 +17,7 @@
 // Service implementation headers
 // <rtc-template block="service_impl_h">
 #include "BasicDataTypeSVC_impl.h"
+#include "ExtendedDataTypesSVC_impl.h"
 
 // </rtc-template>
 
@@ -232,10 +233,11 @@ class RobotArmAutomaticControllerTest
 
   // DataInPort declaration
   // <rtc-template block="inport_declare">
-  RTC::TimedDoubleSeq m_targetPos_output;
+  RTC::TimedPoint3D m_targetPos_output;
   /*!
+   * - Unit: mm
    */
-  RTC::InPort<RTC::TimedDoubleSeq> m_targetPos_outputIn;
+  RTC::InPort<RTC::TimedPoint3D> m_targetPos_outputIn;
   
   // </rtc-template>
 

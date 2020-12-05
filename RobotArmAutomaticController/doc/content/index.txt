@@ -117,7 +117,7 @@ The ports provided by the component are described below:
 Name            Type        Data type                      Purpose
 =============== =========== ============================== =======
 autoSignal_input InPort      RTC::TimedLong                 
-targetPos_output OutPort     RTC::TimedDoubleSeq            
+targetPos_output OutPort     RTC::TimedPoint3D              
 =============== =========== ============================== =======
 
 Examples
