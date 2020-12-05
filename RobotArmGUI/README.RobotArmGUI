@@ -64,14 +64,14 @@ Lang Type:
 	PortNumber:  0
 	Description: 
 	PortType: 
-	DataType:    RTC::TimedDoubleSeq
+	DataType:    RTC::TimedPoint3D
 	MaxOut: 
 	[Data Elements]
 		Name:
 		Type:            
 		Number:          
 		Semantics:       
-		Unit:            
+		Unit:            mm
 		Frequency:       
 		Operation Cycle: 
 		RangeLow:
@@ -100,14 +100,14 @@ Lang Type:
 	PortNumber:  2
 	Description: 
 	PortType: 
-	DataType:    RTC::TimedDoubleSeq
+	DataType:    RTC::TimedPoint3D
 	MaxOut: 
 	[Data Elements]
 		Name:
 		Type:            
 		Number:          
 		Semantics:       
-		Unit:            
+		Unit:            mm
 		Frequency:       
 		Operation Cycle: 
 		RangeLow:
@@ -180,14 +180,14 @@ Lang Type:
 	PortNumber:  3
 	Description: 
 	PortType: 
-	DataType:    RTC::TimedDoubleSeq
+	DataType:    RTC::TimedPoint3D
 	MaxOut: 
 	[Data Elements]
 		Name:
 		Type:            
 		Number:          
 		Semantics:       
-		Unit:            
+		Unit:            mm
 		Frequency:       
 		Operation Cycle: 
 		RangeLow:
@@ -236,7 +236,7 @@ Lang Type:
 		Name:             innerLimitRadius
 		Description:     
 		Type:            double
-		DefaultValue:     500.0
+		DefaultValue:     100.0
 		Unit:            
 		Range:           
 		Constraint:      

@@ -101,7 +101,7 @@ RobotArmGUIは ``RobotArmGUIComp`` を実行（ ``${prefix}/components/bin`` に
 upperArmLength   double             300.0            
 lowerArmLength   double             300.0            
 outerLimitRadius double             500.0            
-innerLimitRadius double             500.0            
+innerLimitRadius double             100.0            
 showSideView     int                1                
 showCoordinates  int                1                
 showCoordinateAxes int                1                
@@ -133,13 +133,13 @@ custom_showInputVal int                0
 =============== =========== ============================== ====
 ポート名        ポート型    データ型                       意味
 =============== =========== ============================== ====
-targetPos_input InPort      RTC::TimedDoubleSeq            
+targetPos_input InPort      RTC::TimedPoint3D              
 customVal_input InPort      RTC::TimedLong                 
-position_input  InPort      RTC::TimedDoubleSeq            
+position_input  InPort      RTC::TimedPoint3D              
 autoSignal_output OutPort     RTC::TimedLong                 
 customSignal_output OutPort     RTC::TimedLong                 
 angle_output    OutPort     RTC::TimedDoubleSeq            
-targetPos_output OutPort     RTC::TimedDoubleSeq            
+targetPos_output OutPort     RTC::TimedPoint3D              
 =============== =========== ============================== ====
 
 例

@@ -21,6 +21,7 @@
 
 // Service Consumer stub headers
 // <rtc-template block="consumer_stub_h">
+#include "ExtendedDataTypesStub.h"
 #include "BasicDataTypeStub.h"
 
 // </rtc-template>
@@ -232,7 +233,7 @@ class RobotArmGUI
   /*!
    * 
    * - Name:  innerLimitRadius
-   * - DefaultValue: 500.0
+   * - DefaultValue: 100.0
    */
   double m_innerLimitRadius;
   /*!
@@ -366,18 +367,20 @@ class RobotArmGUI
 
   // DataInPort declaration
   // <rtc-template block="inport_declare">
-  RTC::TimedDoubleSeq m_targetPos_input;
+  RTC::TimedPoint3D m_targetPos_input;
   /*!
+   * - Unit: mm
    */
-  RTC::InPort<RTC::TimedDoubleSeq> m_targetPos_inputIn;
+  RTC::InPort<RTC::TimedPoint3D> m_targetPos_inputIn;
   RTC::TimedLong m_customVal_input;
   /*!
    */
   RTC::InPort<RTC::TimedLong> m_customVal_inputIn;
-  RTC::TimedDoubleSeq m_position_input;
+  RTC::TimedPoint3D m_position_input;
   /*!
+   * - Unit: mm
    */
-  RTC::InPort<RTC::TimedDoubleSeq> m_position_inputIn;
+  RTC::InPort<RTC::TimedPoint3D> m_position_inputIn;
   
   // </rtc-template>
 
@@ -396,10 +399,11 @@ class RobotArmGUI
   /*!
    */
   RTC::OutPort<RTC::TimedDoubleSeq> m_angle_outputOut;
-  RTC::TimedDoubleSeq m_targetPos_output;
+  RTC::TimedPoint3D m_targetPos_output;
   /*!
+   * - Unit: mm
    */
-  RTC::OutPort<RTC::TimedDoubleSeq> m_targetPos_outputOut;
+  RTC::OutPort<RTC::TimedPoint3D> m_targetPos_outputOut;
   
   // </rtc-template>
 

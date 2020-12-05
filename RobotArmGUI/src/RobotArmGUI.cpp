@@ -345,10 +345,9 @@ RTC::ReturnCode_t RobotArmGUI::onActivated(RTC::UniqueId ec_id)
     customRadius = 35;
 
     //加速度制御コンポーネントに手先の初期座標を送る
-    m_targetPos_output.data.length(3);
-    m_targetPos_output.data[0] = targetP2x * realMag;
-    m_targetPos_output.data[1] = targetP2y * realMag;
-    m_targetPos_output.data[2] = targetP2z * realMag;
+    m_targetPos_output.data.x = targetP2x * realMag;
+    m_targetPos_output.data.y = targetP2y * realMag;
+    m_targetPos_output.data.z = targetP2z * realMag;
     m_targetPos_outputOut.write();
 
     m_autoSignal_output.data = 0;
@@ -356,11 +355,10 @@ RTC::ReturnCode_t RobotArmGUI::onActivated(RTC::UniqueId ec_id)
 
     //自動制御コンポーネントからデータを受け取る
     if (m_showAutoButton > 0) {
-        m_targetPos_input.data.length(1);
         while (1) {
             if (m_targetPos_inputIn.isNew()) {
                 m_targetPos_inputIn.read();
-                maxAutoStatus = m_targetPos_input.data[0];
+                maxAutoStatus = int(m_targetPos_input.data.x);
                 break;
             }
         }
@@ -377,6 +375,9 @@ RTC::ReturnCode_t RobotArmGUI::onActivated(RTC::UniqueId ec_id)
     ChangeFontType(DX_FONTTYPE_ANTIALIASING);
 
     DxLib_Init();
+
+    std::cout << "RobotArmGUI ready!" << std::endl;
+
 
   return RTC::RTC_OK;
 }
@@ -397,12 +398,11 @@ RTC::ReturnCode_t RobotArmGUI::onExecute(RTC::UniqueId ec_id)
 
 
     //加速度制御コンポーネントからデータを受け取る
-    m_position_input.data.length(3);
     if (m_position_inputIn.isNew()) {
         m_position_inputIn.read();
-        p2x = m_position_input.data[0] / realMag;
-        p2y = m_position_input.data[1] / realMag;
-        p2z = m_position_input.data[2] / realMag;
+        p2x = m_position_input.data.x / realMag;
+        p2y = m_position_input.data.y / realMag;
+        p2z = m_position_input.data.z / realMag;
     }
     side1x = side0x - lowerLength * cos(angL);
     side1y = side0y - p1z;
@@ -412,16 +412,15 @@ RTC::ReturnCode_t RobotArmGUI::onExecute(RTC::UniqueId ec_id)
     sideTargetY = side0y - targetP2z;
 
     //CUIコンポーネントまたは自動制御コンポーネントからデータを受け取る
-    m_targetPos_input.data.length(3);
     if (m_targetPos_inputIn.isNew()) {
         m_targetPos_inputIn.read();
-        if (m_targetPos_input.data[0] > 999 && m_targetPos_input.data[1] > 999 && m_targetPos_input.data[2] > 999) {
+        if (m_targetPos_input.data.x > 999 && m_targetPos_input.data.y > 999 && m_targetPos_input.data.z > 999) {
             m_autoSignal_output.data = 0;
         }
         else {
-            targetP2x = m_targetPos_input.data[0] / realMag + windowWidth * 0.5;
-            targetP2y = windowHeight - m_targetPos_input.data[1] / realMag;
-            targetP2z = m_targetPos_input.data[2] / realMag;
+            targetP2x = m_targetPos_input.data.x / realMag + windowWidth * 0.5;
+            targetP2y = windowHeight - m_targetPos_input.data.y / realMag;
+            targetP2z = m_targetPos_input.data.z / realMag;
         }
     }
 
@@ -497,7 +496,7 @@ RTC::ReturnCode_t RobotArmGUI::onExecute(RTC::UniqueId ec_id)
     if (targetP2z > maxTargetP2z) {
         targetP2z = maxTargetP2z;
         maxZflag = true;
-    }    
+    }
 
     //各関節角度計算--------------------------------------------------
     double calL = Dist(windowWidth * 0.5, windowHeight, 0, p2x, p2y, p2z);
@@ -660,9 +659,9 @@ RTC::ReturnCode_t RobotArmGUI::onExecute(RTC::UniqueId ec_id)
     m_customSignal_outputOut.write();
 
     //加速度制御コンポーネントに手先の目標座標と現在の座標を送る
-    m_targetPos_output.data[0] = targetP2x * realMag;
-    m_targetPos_output.data[1] = targetP2y * realMag;
-    m_targetPos_output.data[2] = targetP2z * realMag;
+    m_targetPos_output.data.x = targetP2x * realMag;
+    m_targetPos_output.data.y = targetP2y * realMag;
+    m_targetPos_output.data.z = targetP2z * realMag;
     m_targetPos_outputOut.write();
 
     //シリアル通信コンポーネントに角度情報を送る

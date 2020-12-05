@@ -1,6 +1,8 @@
 set(comp_srcs RobotArmGUI.cpp )
 set(standalone_srcs RobotArmGUIComp.cpp)
 
+set(DXLIB_DIRS "C:/DxLib_VC/プロジェクトに追加すべきファイル_VC用" CACHE PATH "Path to DXLIB")
+
 if(${OPENRTM_VERSION_MAJOR} LESS 2)
   set(OPENRTM_CFLAGS ${OPENRTM_CFLAGS} ${OMNIORB_CFLAGS})
   set(OPENRTM_INCLUDE_DIRS ${OPENRTM_INCLUDE_DIRS} ${OMNIORB_INCLUDE_DIRS})
@@ -38,6 +40,9 @@ add_definitions(${OPENRTM_CFLAGS})
 MAP_ADD_STR(comp_hdrs "../" comp_headers)
 
 link_directories(${OPENRTM_LIBRARY_DIRS})
+
+include_directories(${OPENRTM_LIBRARY_DIRS} ${DXLIB_DIRS})
+link_directories(${OPENRTM_LIBRARY_DIRS} ${DXLIB_DIRS})
 
 add_library(${PROJECT_NAME} ${LIB_TYPE} ${comp_srcs}
   ${comp_headers} ${ALL_IDL_SRCS})

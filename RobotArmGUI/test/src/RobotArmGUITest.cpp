@@ -28,7 +28,7 @@ static const char* robotarmgui_spec[] =
     "conf.default.upperArmLength", "300.0",
     "conf.default.lowerArmLength", "300.0",
     "conf.default.outerLimitRadius", "500.0",
-    "conf.default.innerLimitRadius", "500.0",
+    "conf.default.innerLimitRadius", "100.0",
     "conf.default.showSideView", "1",
     "conf.default.showCoordinates", "1",
     "conf.default.showCoordinateAxes", "1",
@@ -165,7 +165,7 @@ RTC::ReturnCode_t RobotArmGUITest::onInitialize()
   bindParameter("upperArmLength", m_upperArmLength, "300.0");
   bindParameter("lowerArmLength", m_lowerArmLength, "300.0");
   bindParameter("outerLimitRadius", m_outerLimitRadius, "500.0");
-  bindParameter("innerLimitRadius", m_innerLimitRadius, "500.0");
+  bindParameter("innerLimitRadius", m_innerLimitRadius, "100.0");
   bindParameter("showSideView", m_showSideView, "1");
   bindParameter("showCoordinates", m_showCoordinates, "1");
   bindParameter("showCoordinateAxes", m_showCoordinateAxes, "1");

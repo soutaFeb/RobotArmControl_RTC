@@ -16,6 +16,7 @@
 
 // Service implementation headers
 // <rtc-template block="service_impl_h">
+#include "ExtendedDataTypesSVC_impl.h"
 #include "BasicDataTypeSVC_impl.h"
 
 // </rtc-template>
@@ -248,7 +249,7 @@ class RobotArmGUITest
   /*!
    * 
    * - Name:  innerLimitRadius
-   * - DefaultValue: 500.0
+   * - DefaultValue: 100.0
    */
   double m_innerLimitRadius;
   /*!
@@ -394,28 +395,31 @@ class RobotArmGUITest
   /*!
    */
   RTC::InPort<RTC::TimedDoubleSeq> m_angle_outputIn;
-  RTC::TimedDoubleSeq m_targetPos_output;
+  RTC::TimedPoint3D m_targetPos_output;
   /*!
+   * - Unit: mm
    */
-  RTC::InPort<RTC::TimedDoubleSeq> m_targetPos_outputIn;
+  RTC::InPort<RTC::TimedPoint3D> m_targetPos_outputIn;
   
   // </rtc-template>
 
 
   // DataOutPort declaration
   // <rtc-template block="outport_declare">
-  RTC::TimedDoubleSeq m_targetPos_input;
+  RTC::TimedPoint3D m_targetPos_input;
   /*!
+   * - Unit: mm
    */
-  RTC::OutPort<RTC::TimedDoubleSeq> m_targetPos_inputOut;
+  RTC::OutPort<RTC::TimedPoint3D> m_targetPos_inputOut;
   RTC::TimedLong m_customVal_input;
   /*!
    */
   RTC::OutPort<RTC::TimedLong> m_customVal_inputOut;
-  RTC::TimedDoubleSeq m_position_input;
+  RTC::TimedPoint3D m_position_input;
   /*!
+   * - Unit: mm
    */
-  RTC::OutPort<RTC::TimedDoubleSeq> m_position_inputOut;
+  RTC::OutPort<RTC::TimedPoint3D> m_position_inputOut;
   
   // </rtc-template>
 
