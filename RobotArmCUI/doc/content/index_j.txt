@@ -108,7 +108,7 @@ RobotArmCUIは ``RobotArmCUIComp`` を実行（ ``${prefix}/components/bin`` に
 =============== =========== ============================== ====
 ポート名        ポート型    データ型                       意味
 =============== =========== ============================== ====
-targetPos_output OutPort     RTC::TimedDoubleSeq            
+targetPos_output OutPort     RTC::TimedPoint3D              
 =============== =========== ============================== ====
 
 例

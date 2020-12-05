@@ -72,14 +72,14 @@ Lang Type:
 	PortNumber:  0
 	Description: 
 	PortType: 
-	DataType:    RTC::TimedDoubleSeq
+	DataType:    RTC::TimedPoint3D
 	MaxOut: 
 	[Data Elements]
 		Name:
 		Type:            
 		Number:          
 		Semantics:       
-		Unit:            
+		Unit:            mm
 		Frequency:       
 		Operation Cycle: 
 		RangeLow:

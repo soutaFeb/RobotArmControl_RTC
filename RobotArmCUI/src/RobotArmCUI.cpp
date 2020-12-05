@@ -97,6 +97,8 @@ RTC::ReturnCode_t RobotArmCUI::onShutdown(RTC::UniqueId ec_id)
 
 RTC::ReturnCode_t RobotArmCUI::onActivated(RTC::UniqueId ec_id)
 {
+    std::cout << "RobotArmCUI ready!" << std::endl;
+
   return RTC::RTC_OK;
 }
 
@@ -109,8 +111,6 @@ RTC::ReturnCode_t RobotArmCUI::onDeactivated(RTC::UniqueId ec_id)
 
 RTC::ReturnCode_t RobotArmCUI::onExecute(RTC::UniqueId ec_id)
 {
-    
-    m_targetPos_output.data.length(3);
 
     std::cout << "" << std::endl;
     std::cout << "Please input target coordinates: " << std::endl;
@@ -132,7 +132,7 @@ RTC::ReturnCode_t RobotArmCUI::onExecute(RTC::UniqueId ec_id)
         signX = -1;
     }
     if (std::all_of(x.cbegin(), x.cend(), isdigit) && x.size() > 0) {
-        m_targetPos_output.data[0] = signX * std::stod(x);
+        m_targetPos_output.data.x = signX * std::stod(x);
         xFlag = true;
     }
     if (xFlag) {
@@ -143,7 +143,7 @@ RTC::ReturnCode_t RobotArmCUI::onExecute(RTC::UniqueId ec_id)
             signY = -1;
         }
         if (std::all_of(y.cbegin(), y.cend(), isdigit) && y.size() > 0) {
-            m_targetPos_output.data[1] = signY * std::stod(y);
+            m_targetPos_output.data.y = signY * std::stod(y);
             yFlag = true;
         }
     }
@@ -155,7 +155,7 @@ RTC::ReturnCode_t RobotArmCUI::onExecute(RTC::UniqueId ec_id)
             signZ = -1;
         }
         if (std::all_of(z.cbegin(), z.cend(), isdigit) && z.size() > 0) {
-            m_targetPos_output.data[2] = signZ * std::stod(z);
+            m_targetPos_output.data.z = signZ * std::stod(z);
             zFlag = true;
         }
     }
