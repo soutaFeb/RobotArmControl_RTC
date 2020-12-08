@@ -71,7 +71,7 @@ Lang Type:
 		Type:            
 		Number:          
 		Semantics:       
-		Unit:            mm
+		Unit:            m
 		Frequency:       
 		Operation Cycle: 
 		RangeLow:
@@ -97,7 +97,7 @@ Lang Type:
 		Type:            
 		Number:          
 		Semantics:       
-		Unit:            mm
+		Unit:            m
 		Frequency:       
 		Operation Cycle: 
 		RangeLow:

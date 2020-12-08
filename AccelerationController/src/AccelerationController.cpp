@@ -9,7 +9,7 @@
 
 #include "AccelerationController.h"
 
-//２点間距離を求める関数
+ //２点間距離を求める関数
 double Dist(double x1, double y1, double z1, double x2, double y2, double z2) {
     return sqrt(pow((x1 - x2), 2) + pow(y1 - y2, 2) + pow(z1 - z2, 2));
 }
@@ -132,12 +132,13 @@ RTC::ReturnCode_t AccelerationController::onShutdown(RTC::UniqueId ec_id)
 
 RTC::ReturnCode_t AccelerationController::onActivated(RTC::UniqueId ec_id)
 {
+
     while (1) {
         if (m_targetPos_inputIn.isNew()) {
             m_targetPos_inputIn.read();
-            px = m_targetPos_input.data.x;
-            py = m_targetPos_input.data.y;
-            pz = m_targetPos_input.data.z;
+            px = 1000 * m_targetPos_input.data.x;
+            py = 1000 * m_targetPos_input.data.y;
+            pz = 1000 * m_targetPos_input.data.z;
             break;
         }
     }
@@ -154,12 +155,11 @@ RTC::ReturnCode_t AccelerationController::onDeactivated(RTC::UniqueId ec_id)
 
 RTC::ReturnCode_t AccelerationController::onExecute(RTC::UniqueId ec_id)
 {
-
     if (m_targetPos_inputIn.isNew()) {
         m_targetPos_inputIn.read();
-        targetPx = m_targetPos_input.data.x;
-        targetPy = m_targetPos_input.data.y;
-        targetPz = m_targetPos_input.data.z;
+        targetPx = 1000 * m_targetPos_input.data.x;
+        targetPy = 1000 * m_targetPos_input.data.y;
+        targetPz = 1000 * m_targetPos_input.data.z;
 
         double stopLength = 0;//現在の速度から逆方向に加速度をかけて止まるまでに進む距離
         double S = speed;//target方向への現在の速度
@@ -187,9 +187,9 @@ RTC::ReturnCode_t AccelerationController::onExecute(RTC::UniqueId ec_id)
         py += speed * sin(angleXY) * abs(cos(angleZ));
         pz += speed * sin(angleZ);
 
-        m_position_output.data.x = px;
-        m_position_output.data.y = py;
-        m_position_output.data.z = pz;
+        m_position_output.data.x = 0.001 * px;
+        m_position_output.data.y = 0.001 * py;
+        m_position_output.data.z = 0.001 * pz;
         m_position_outputOut.write();
 
     }

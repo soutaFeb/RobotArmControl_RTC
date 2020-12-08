@@ -230,7 +230,7 @@ class AccelerationController
   // <rtc-template block="inport_declare">
   RTC::TimedPoint3D m_targetPos_input;
   /*!
-   * - Unit: mm
+   * - Unit: m
    */
   RTC::InPort<RTC::TimedPoint3D> m_targetPos_inputIn;
   
@@ -241,7 +241,7 @@ class AccelerationController
   // <rtc-template block="outport_declare">
   RTC::TimedPoint3D m_position_output;
   /*!
-   * - Unit: mm
+   * - Unit: m
    */
   RTC::OutPort<RTC::TimedPoint3D> m_position_outputOut;
   
