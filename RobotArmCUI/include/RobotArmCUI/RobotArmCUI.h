@@ -224,7 +224,7 @@ class RobotArmCUI
   // <rtc-template block="outport_declare">
   RTC::TimedPoint3D m_targetPos_output;
   /*!
-   * - Unit: mm
+   * - Unit: m
    */
   RTC::OutPort<RTC::TimedPoint3D> m_targetPos_outputOut;
   
