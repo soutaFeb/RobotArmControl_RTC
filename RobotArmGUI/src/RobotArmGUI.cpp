@@ -13,7 +13,7 @@
 #include <math.h>
 #include <cmath>
 
- //渡された数値をある範囲から別の範囲に変更する関数
+//渡された数値をある範囲から別の範囲に変更する関数
 double Map(double value, double start1, double end1, double start2, double end2) {
     return start2 + (end2 - start2) * ((value - start1) / (end1 - start1));
 }
@@ -287,6 +287,8 @@ RTC::ReturnCode_t RobotArmGUI::onInitialize()
   bindParameter("custom_releaseVal", m_custom_releaseVal, "3");
   bindParameter("custom_showInputVal", m_custom_showInputVal, "0");
   // </rtc-template>
+
+  std::cout << "RobotArmGUI ready!" << std::endl;
   
   return RTC::RTC_OK;
 }
@@ -345,9 +347,9 @@ RTC::ReturnCode_t RobotArmGUI::onActivated(RTC::UniqueId ec_id)
     customRadius = 35;
 
     //加速度制御コンポーネントに手先の初期座標を送る
-    m_targetPos_output.data.x = targetP2x * realMag;
-    m_targetPos_output.data.y = targetP2y * realMag;
-    m_targetPos_output.data.z = targetP2z * realMag;
+    m_targetPos_output.data.x = 0.001 * targetP2x * realMag;
+    m_targetPos_output.data.y = 0.001 * targetP2y * realMag;
+    m_targetPos_output.data.z = 0.001 * targetP2z * realMag;
     m_targetPos_outputOut.write();
 
     m_autoSignal_output.data = 0;
@@ -376,17 +378,12 @@ RTC::ReturnCode_t RobotArmGUI::onActivated(RTC::UniqueId ec_id)
 
     DxLib_Init();
 
-    std::cout << "RobotArmGUI ready!" << std::endl;
-
-
   return RTC::RTC_OK;
 }
 
 
 RTC::ReturnCode_t RobotArmGUI::onDeactivated(RTC::UniqueId ec_id)
 {
-    DxLib_End();
-
   return RTC::RTC_OK;
 }
 
@@ -400,9 +397,9 @@ RTC::ReturnCode_t RobotArmGUI::onExecute(RTC::UniqueId ec_id)
     //加速度制御コンポーネントからデータを受け取る
     if (m_position_inputIn.isNew()) {
         m_position_inputIn.read();
-        p2x = m_position_input.data.x / realMag;
-        p2y = m_position_input.data.y / realMag;
-        p2z = m_position_input.data.z / realMag;
+        p2x = 1000 * m_position_input.data.x / realMag;
+        p2y = 1000 * m_position_input.data.y / realMag;
+        p2z = 1000 * m_position_input.data.z / realMag;
     }
     side1x = side0x - lowerLength * cos(angL);
     side1y = side0y - p1z;
@@ -418,9 +415,9 @@ RTC::ReturnCode_t RobotArmGUI::onExecute(RTC::UniqueId ec_id)
             m_autoSignal_output.data = 0;
         }
         else {
-            targetP2x = m_targetPos_input.data.x / realMag + windowWidth * 0.5;
-            targetP2y = windowHeight - m_targetPos_input.data.y / realMag;
-            targetP2z = m_targetPos_input.data.z / realMag;
+            targetP2x = (1000 * m_targetPos_input.data.x) / realMag + windowWidth * 0.5;
+            targetP2y = windowHeight - (1000 * m_targetPos_input.data.y) / realMag;
+            targetP2z = (1000 * m_targetPos_input.data.z) / realMag;
         }
     }
 
@@ -659,9 +656,9 @@ RTC::ReturnCode_t RobotArmGUI::onExecute(RTC::UniqueId ec_id)
     m_customSignal_outputOut.write();
 
     //加速度制御コンポーネントに手先の目標座標と現在の座標を送る
-    m_targetPos_output.data.x = targetP2x * realMag;
-    m_targetPos_output.data.y = targetP2y * realMag;
-    m_targetPos_output.data.z = targetP2z * realMag;
+    m_targetPos_output.data.x = 0.001 * targetP2x * realMag;
+    m_targetPos_output.data.y = 0.001 * targetP2y * realMag;
+    m_targetPos_output.data.z = 0.001 * targetP2z * realMag;
     m_targetPos_outputOut.write();
 
     //シリアル通信コンポーネントに角度情報を送る
@@ -733,6 +730,7 @@ RTC::ReturnCode_t RobotArmGUI::onExecute(RTC::UniqueId ec_id)
             DrawCircleAA(float(windowWidth * 0.5), float(windowHeight), float(m_auxiliaryArcInterval / realMag * i), 128, lineColor, false);
         }
     }
+
     DrawCircleAA(float(windowWidth * 0.5), float(windowHeight), float(outerRadius), 128, accentColor, false);//動作範囲上限半径
     DrawCircleAA(float(windowWidth * 0.5), float(windowHeight), float(innerRadius), 128, accentColor, false);//動作範囲下限半径
     DrawLineAA(float(p0x), float(p0y), float(p2x), float(p2y), lineColor, 5);//アームの線
@@ -743,6 +741,34 @@ RTC::ReturnCode_t RobotArmGUI::onExecute(RTC::UniqueId ec_id)
     DrawCircleAA(float(p2x), float(p2y), float(jointSize * 0.5 - 1), 32, accentColor, true);//現在の手先位置の円
     DrawCircleAA(float(p1x), float(p1y), float(jointSize * 0.5 - 1), 32, lineColor, true);
     DrawCircleAA(float(p0x), float(p0y), float(jointSize * 0.5 - 1), 32, lineColor, true);
+
+    //交点合わせ機能
+    if (CheckHitKey(KEY_INPUT_LSHIFT) || CheckHitKey(KEY_INPUT_RSHIFT)) {
+        double intersectionX = 10000.0;
+        double intersectionY = 10000.0;
+        if (m_auxiliaryArcInterval > 0 && m_auxiliaryLineInterval > 0) {
+            for (int i = 1; i <= arcRadius / (m_auxiliaryArcInterval / realMag); i++) {//補助円
+                for (int j = 0; j <= 90 / m_auxiliaryLineInterval; j++) {//補助線
+                    double intersectionCalX = ((i * m_auxiliaryArcInterval / realMag) * sin(j * m_auxiliaryLineInterval * PI / 180)) + windowWidth * 0.5;
+                    double intersectionCalY = windowHeight - ((i * m_auxiliaryArcInterval / realMag) * cos(j * m_auxiliaryLineInterval * PI / 180));
+                    if (Dist(targetP2x, targetP2y, 0, intersectionCalX, intersectionCalY, 0) < Dist(targetP2x, targetP2y, 0, intersectionX, intersectionY, 0)) {
+                        intersectionX = intersectionCalX;
+                        intersectionY = intersectionCalY;
+                    }
+                    intersectionCalX = -((i * m_auxiliaryArcInterval / realMag) * sin(j * m_auxiliaryLineInterval * PI / 180)) + windowWidth * 0.5;
+                    if (Dist(targetP2x, targetP2y, 0, intersectionCalX, intersectionCalY, 0) < Dist(targetP2x, targetP2y, 0, intersectionX, intersectionY, 0)) {
+                        intersectionX = intersectionCalX;
+                        intersectionY = intersectionCalY;
+                    }
+                }
+            }
+        }
+        if (!topDragg && !sideDragg) {
+            targetP2x = intersectionX;
+            targetP2y = intersectionY;
+        }
+        DrawCircleAA(float(intersectionX), float(intersectionY), float(jointSize * 0.5 * 0.3), 32, accentColor, true);//手先xy座標が最も交点を表示
+    }
 
     ScreenFlip();//裏画面を表画面にコピー
 

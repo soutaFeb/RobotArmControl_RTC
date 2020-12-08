@@ -397,7 +397,7 @@ class RobotArmGUITest
   RTC::InPort<RTC::TimedDoubleSeq> m_angle_outputIn;
   RTC::TimedPoint3D m_targetPos_output;
   /*!
-   * - Unit: mm
+   * - Unit: m
    */
   RTC::InPort<RTC::TimedPoint3D> m_targetPos_outputIn;
   
@@ -408,7 +408,7 @@ class RobotArmGUITest
   // <rtc-template block="outport_declare">
   RTC::TimedPoint3D m_targetPos_input;
   /*!
-   * - Unit: mm
+   * - Unit: m
    */
   RTC::OutPort<RTC::TimedPoint3D> m_targetPos_inputOut;
   RTC::TimedLong m_customVal_input;
@@ -417,7 +417,7 @@ class RobotArmGUITest
   RTC::OutPort<RTC::TimedLong> m_customVal_inputOut;
   RTC::TimedPoint3D m_position_input;
   /*!
-   * - Unit: mm
+   * - Unit: m
    */
   RTC::OutPort<RTC::TimedPoint3D> m_position_inputOut;
   
