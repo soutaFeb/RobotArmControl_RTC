@@ -86,6 +86,8 @@ RTC::ReturnCode_t RobotArmAutomaticController::onInitialize()
   // <rtc-template block="bind_config">
   // </rtc-template>
   
+  std::cout << "RobotArmAutomaticController ready!" << std::endl;
+
   return RTC::RTC_OK;
 }
 
@@ -140,8 +142,6 @@ RTC::ReturnCode_t RobotArmAutomaticController::onActivated(RTC::UniqueId ec_id)
         }
     }
 
-    std::cout << "RobotArmAutomaticController ready!" << std::endl;
-
   return RTC::RTC_OK;
 }
 
@@ -161,9 +161,9 @@ RTC::ReturnCode_t RobotArmAutomaticController::onExecute(RTC::UniqueId ec_id)
 
         if (autoSignal > 0) {
             if (timeCount == 0) {
-                m_targetPos_output.data.x = posX[autoSignal - 1][sendNum];
-                m_targetPos_output.data.y = posY[autoSignal - 1][sendNum];
-                m_targetPos_output.data.z = posZ[autoSignal - 1][sendNum];
+                m_targetPos_output.data.x = 0.001 * posX[autoSignal - 1][sendNum];
+                m_targetPos_output.data.y = 0.001 * posY[autoSignal - 1][sendNum];
+                m_targetPos_output.data.z = 0.001 * posZ[autoSignal - 1][sendNum];
                 sendNum++;
             }
             timeCount++;

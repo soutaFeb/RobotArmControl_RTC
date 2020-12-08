@@ -235,7 +235,7 @@ class RobotArmAutomaticControllerTest
   // <rtc-template block="inport_declare">
   RTC::TimedPoint3D m_targetPos_output;
   /*!
-   * - Unit: mm
+   * - Unit: m
    */
   RTC::InPort<RTC::TimedPoint3D> m_targetPos_outputIn;
   
