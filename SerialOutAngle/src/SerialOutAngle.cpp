@@ -92,6 +92,8 @@ RTC::ReturnCode_t SerialOutAngle::onInitialize()
   // Bind variables and configuration variable
   bindParameter("portName", m_portName, "COM1");
   // </rtc-template>
+
+  std::cout << "SerialOutAngle ready!" << std::endl;
   
   return RTC::RTC_OK;
 }
@@ -120,7 +122,6 @@ RTC::ReturnCode_t SerialOutAngle::onShutdown(RTC::UniqueId ec_id)
 
 RTC::ReturnCode_t SerialOutAngle::onActivated(RTC::UniqueId ec_id)
 {
-	std::cout << "SerialOutAngle ready!" << std::endl;
 
   return RTC::RTC_OK;
 }
@@ -153,8 +154,7 @@ RTC::ReturnCode_t SerialOutAngle::onExecute(RTC::UniqueId ec_id)
 			}
 			arduino = CreateFile(_T(name), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 			if (arduino == INVALID_HANDLE_VALUE) {
-				printf("PORT COULD NOT OPEN\n");
-				//system("PAUSE");
+				printf("Port could not open...\n");
 				RTC::RTC_ERROR;
 			}
 
