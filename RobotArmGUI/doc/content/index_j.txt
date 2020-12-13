@@ -114,15 +114,16 @@ accentColor_G    int                0
 accentColor_B    int                0                
 backgroundBrightness int                0                
 arcBrightness    int                50               
-showAutoButton   int                1                
-showCustomButton int                0                
-custom_name      string             custom           
-custom_alternateOperation int                0                
-custom_linkWithRightClick int                0                
-custom_pushVal   int                1                
-custom_pressVal  int                2                
-custom_releaseVal int                3                
-custom_showInputVal int                0                
+button1_name     string             Auto             
+button1_pressName string             Running          
+button1_choicesNum int                3                
+button1_alternateOperation int                1                
+button1_linkWithRightClick int                0                
+button2_name     string             none             
+button2_pressName string             pressName        
+button2_choicesNum int                1                
+button2_alternateOperation int                0                
+button2_linkWithRightClick int                0                
 ================ ================== ================ ====
 
 ポート
@@ -133,11 +134,13 @@ custom_showInputVal int                0
 =============== =========== ============================== ====
 ポート名        ポート型    データ型                       意味
 =============== =========== ============================== ====
+button1_input   InPort      RTC::TimedBoolean              
+button2_input   InPort      RTC::TimedBoolean              
+displayVal_input InPort      RTC::TimedLong                 
 targetPos_input InPort      RTC::TimedPoint3D              
-customVal_input InPort      RTC::TimedLong                 
 position_input  InPort      RTC::TimedPoint3D              
-autoSignal_output OutPort     RTC::TimedLong                 
-customSignal_output OutPort     RTC::TimedLong                 
+button1_output  OutPort     RTC::TimedLong                 
+button2_output  OutPort     RTC::TimedLong                 
 angle_output    OutPort     RTC::TimedDoubleSeq            
 targetPos_output OutPort     RTC::TimedPoint3D              
 =============== =========== ============================== ====

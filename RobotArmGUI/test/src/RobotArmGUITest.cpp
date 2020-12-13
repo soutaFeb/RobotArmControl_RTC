@@ -41,15 +41,16 @@ static const char* robotarmgui_spec[] =
     "conf.default.accentColor_B", "0",
     "conf.default.backgroundBrightness", "0",
     "conf.default.arcBrightness", "50",
-    "conf.default.showAutoButton", "1",
-    "conf.default.showCustomButton", "0",
-    "conf.default.custom_name", "custom",
-    "conf.default.custom_alternateOperation", "0",
-    "conf.default.custom_linkWithRightClick", "0",
-    "conf.default.custom_pushVal", "1",
-    "conf.default.custom_pressVal", "2",
-    "conf.default.custom_releaseVal", "3",
-    "conf.default.custom_showInputVal", "0",
+    "conf.default.button1_name", "Auto",
+    "conf.default.button1_pressName", "Running",
+    "conf.default.button1_choicesNum", "3",
+    "conf.default.button1_alternateOperation", "1",
+    "conf.default.button1_linkWithRightClick", "0",
+    "conf.default.button2_name", "none",
+    "conf.default.button2_pressName", "pressName",
+    "conf.default.button2_choicesNum", "1",
+    "conf.default.button2_alternateOperation", "0",
+    "conf.default.button2_linkWithRightClick", "0",
 
     // Widget
     "conf.__widget__.upperArmLength", "text",
@@ -68,15 +69,16 @@ static const char* robotarmgui_spec[] =
     "conf.__widget__.accentColor_B", "text",
     "conf.__widget__.backgroundBrightness", "text",
     "conf.__widget__.arcBrightness", "text",
-    "conf.__widget__.showAutoButton", "text",
-    "conf.__widget__.showCustomButton", "text",
-    "conf.__widget__.custom_name", "text",
-    "conf.__widget__.custom_alternateOperation", "text",
-    "conf.__widget__.custom_linkWithRightClick", "text",
-    "conf.__widget__.custom_pushVal", "text",
-    "conf.__widget__.custom_pressVal", "text",
-    "conf.__widget__.custom_releaseVal", "text",
-    "conf.__widget__.custom_showInputVal", "text",
+    "conf.__widget__.button1_name", "text",
+    "conf.__widget__.button1_pressName", "text",
+    "conf.__widget__.button1_choicesNum", "text",
+    "conf.__widget__.button1_alternateOperation", "text",
+    "conf.__widget__.button1_linkWithRightClick", "text",
+    "conf.__widget__.button2_name", "text",
+    "conf.__widget__.button2_pressName", "text",
+    "conf.__widget__.button2_choicesNum", "text",
+    "conf.__widget__.button2_alternateOperation", "text",
+    "conf.__widget__.button2_linkWithRightClick", "text",
     // Constraints
 
     "conf.__type__.upperArmLength", "double",
@@ -95,15 +97,16 @@ static const char* robotarmgui_spec[] =
     "conf.__type__.accentColor_B", "int",
     "conf.__type__.backgroundBrightness", "int",
     "conf.__type__.arcBrightness", "int",
-    "conf.__type__.showAutoButton", "int",
-    "conf.__type__.showCustomButton", "int",
-    "conf.__type__.custom_name", "string",
-    "conf.__type__.custom_alternateOperation", "int",
-    "conf.__type__.custom_linkWithRightClick", "int",
-    "conf.__type__.custom_pushVal", "int",
-    "conf.__type__.custom_pressVal", "int",
-    "conf.__type__.custom_releaseVal", "int",
-    "conf.__type__.custom_showInputVal", "int",
+    "conf.__type__.button1_name", "string",
+    "conf.__type__.button1_pressName", "string",
+    "conf.__type__.button1_choicesNum", "int",
+    "conf.__type__.button1_alternateOperation", "int",
+    "conf.__type__.button1_linkWithRightClick", "int",
+    "conf.__type__.button2_name", "string",
+    "conf.__type__.button2_pressName", "string",
+    "conf.__type__.button2_choicesNum", "int",
+    "conf.__type__.button2_alternateOperation", "int",
+    "conf.__type__.button2_linkWithRightClick", "int",
 
     ""
   };
@@ -116,11 +119,13 @@ static const char* robotarmgui_spec[] =
 RobotArmGUITest::RobotArmGUITest(RTC::Manager* manager)
     // <rtc-template block="initializer">
   : RTC::DataFlowComponentBase(manager),
+    m_button1_inputIn("button1_input", m_button1_input),
+    m_button2_inputIn("button2_input", m_button2_input),
+    m_displayVal_inputIn("displayVal_input", m_displayVal_input),
     m_targetPos_inputIn("targetPos_input", m_targetPos_input),
-    m_customVal_inputIn("customVal_input", m_customVal_input),
     m_position_inputIn("position_input", m_position_input),
-    m_autoSignal_outputOut("autoSignal_output", m_autoSignal_output),
-    m_customSignal_outputOut("customSignal_output", m_customSignal_output),
+    m_button1_outputOut("button1_output", m_button1_output),
+    m_button2_outputOut("button2_output", m_button2_output),
     m_angle_outputOut("angle_output", m_angle_output),
     m_targetPos_outputOut("targetPos_output", m_targetPos_output)
 
@@ -142,14 +147,16 @@ RTC::ReturnCode_t RobotArmGUITest::onInitialize()
   // Registration: InPort/OutPort/Service
   // <rtc-template block="registration">
   // Set InPort buffers
-  addInPort("autoSignal_output", m_autoSignal_outputIn);
-  addInPort("customSignal_output", m_customSignal_outputIn);
+  addInPort("button1_output", m_button1_outputIn);
+  addInPort("button2_output", m_button2_outputIn);
   addInPort("angle_output", m_angle_outputIn);
   addInPort("targetPos_output", m_targetPos_outputIn);
   
   // Set OutPort buffer
+  addOutPort("button1_input", m_button1_inputOut);
+  addOutPort("button2_input", m_button2_inputOut);
+  addOutPort("displayVal_input", m_displayVal_inputOut);
   addOutPort("targetPos_input", m_targetPos_inputOut);
-  addOutPort("customVal_input", m_customVal_inputOut);
   addOutPort("position_input", m_position_inputOut);
   
   // Set service provider to Ports
@@ -178,15 +185,16 @@ RTC::ReturnCode_t RobotArmGUITest::onInitialize()
   bindParameter("accentColor_B", m_accentColor_B, "0");
   bindParameter("backgroundBrightness", m_backgroundBrightness, "0");
   bindParameter("arcBrightness", m_arcBrightness, "50");
-  bindParameter("showAutoButton", m_showAutoButton, "1");
-  bindParameter("showCustomButton", m_showCustomButton, "0");
-  bindParameter("custom_name", m_custom_name, "custom");
-  bindParameter("custom_alternateOperation", m_custom_alternateOperation, "0");
-  bindParameter("custom_linkWithRightClick", m_custom_linkWithRightClick, "0");
-  bindParameter("custom_pushVal", m_custom_pushVal, "1");
-  bindParameter("custom_pressVal", m_custom_pressVal, "2");
-  bindParameter("custom_releaseVal", m_custom_releaseVal, "3");
-  bindParameter("custom_showInputVal", m_custom_showInputVal, "0");
+  bindParameter("button1_name", m_button1_name, "Auto");
+  bindParameter("button1_pressName", m_button1_pressName, "Running");
+  bindParameter("button1_choicesNum", m_button1_choicesNum, "3");
+  bindParameter("button1_alternateOperation", m_button1_alternateOperation, "1");
+  bindParameter("button1_linkWithRightClick", m_button1_linkWithRightClick, "0");
+  bindParameter("button2_name", m_button2_name, "none");
+  bindParameter("button2_pressName", m_button2_pressName, "pressName");
+  bindParameter("button2_choicesNum", m_button2_choicesNum, "1");
+  bindParameter("button2_alternateOperation", m_button2_alternateOperation, "0");
+  bindParameter("button2_linkWithRightClick", m_button2_linkWithRightClick, "0");
   // </rtc-template>
   
   return RTC::RTC_OK;

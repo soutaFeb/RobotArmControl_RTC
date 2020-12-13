@@ -16,8 +16,8 @@
 
 // Service implementation headers
 // <rtc-template block="service_impl_h">
-#include "ExtendedDataTypesSVC_impl.h"
 #include "BasicDataTypeSVC_impl.h"
+#include "ExtendedDataTypesSVC_impl.h"
 
 // </rtc-template>
 
@@ -326,71 +326,77 @@ class RobotArmGUITest
   int m_arcBrightness;
   /*!
    * 
-   * - Name:  showAutoButton
-   * - DefaultValue: 1
+   * - Name:  button1_name
+   * - DefaultValue: Auto
    */
-  int m_showAutoButton;
+  std::string m_button1_name;
   /*!
    * 
-   * - Name:  showCustomButton
-   * - DefaultValue: 0
+   * - Name:  button1_pressName
+   * - DefaultValue: Running
    */
-  int m_showCustomButton;
+  std::string m_button1_pressName;
   /*!
    * 
-   * - Name:  custom_name
-   * - DefaultValue: custom
-   */
-  std::string m_custom_name;
-  /*!
-   * 
-   * - Name:  custom_alternateOperation
-   * - DefaultValue: 0
-   */
-  int m_custom_alternateOperation;
-  /*!
-   * 
-   * - Name:  custom_linkWithRightClick
-   * - DefaultValue: 0
-   */
-  int m_custom_linkWithRightClick;
-  /*!
-   * 
-   * - Name:  custom_pushVal
-   * - DefaultValue: 1
-   */
-  int m_custom_pushVal;
-  /*!
-   * 
-   * - Name:  custom_pressVal
-   * - DefaultValue: 2
-   */
-  int m_custom_pressVal;
-  /*!
-   * 
-   * - Name:  custom_releaseVal
+   * - Name:  button1_choicesNum
    * - DefaultValue: 3
    */
-  int m_custom_releaseVal;
+  int m_button1_choicesNum;
   /*!
    * 
-   * - Name:  custom_showInputVal
+   * - Name:  button1_alternateOperation
+   * - DefaultValue: 1
+   */
+  int m_button1_alternateOperation;
+  /*!
+   * 
+   * - Name:  button1_linkWithRightClick
    * - DefaultValue: 0
    */
-  int m_custom_showInputVal;
+  int m_button1_linkWithRightClick;
+  /*!
+   * 
+   * - Name:  button2_name
+   * - DefaultValue: none
+   */
+  std::string m_button2_name;
+  /*!
+   * 
+   * - Name:  button2_pressName
+   * - DefaultValue: pressName
+   */
+  std::string m_button2_pressName;
+  /*!
+   * 
+   * - Name:  button2_choicesNum
+   * - DefaultValue: 1
+   */
+  int m_button2_choicesNum;
+  /*!
+   * 
+   * - Name:  button2_alternateOperation
+   * - DefaultValue: 0
+   */
+  int m_button2_alternateOperation;
+  /*!
+   * 
+   * - Name:  button2_linkWithRightClick
+   * - DefaultValue: 0
+   */
+  int m_button2_linkWithRightClick;
 
   // </rtc-template>
 
   // DataInPort declaration
   // <rtc-template block="inport_declare">
-  RTC::TimedLong m_autoSignal_output;
+  RTC::TimedLong m_button1_output;
   /*!
    */
-  RTC::InPort<RTC::TimedLong> m_autoSignal_outputIn;
-  RTC::TimedLong m_customSignal_output;
+  RTC::InPort<RTC::TimedLong> m_button1_outputIn;
+  RTC::TimedLong m_button2_output;
   /*!
    */
-  RTC::InPort<RTC::TimedLong> m_customSignal_outputIn;
+  RTC::InPort<RTC::TimedLong> m_button2_outputIn;
   RTC::TimedDoubleSeq m_angle_output;
   /*!
    */
@@ -406,15 +412,23 @@ class RobotArmGUITest
 
   // DataOutPort declaration
   // <rtc-template block="outport_declare">
+  RTC::TimedBoolean m_button1_input;
+  /*!
+   */
+  RTC::OutPort<RTC::TimedBoolean> m_button1_inputOut;
+  RTC::TimedBoolean m_button2_input;
+  /*!
+   */
+  RTC::OutPort<RTC::TimedBoolean> m_button2_inputOut;
+  RTC::TimedLong m_displayVal_input;
+  /*!
+   */
+  RTC::OutPort<RTC::TimedLong> m_displayVal_inputOut;
   RTC::TimedPoint3D m_targetPos_input;
   /*!
    * - Unit: m
    */
   RTC::OutPort<RTC::TimedPoint3D> m_targetPos_inputOut;
-  RTC::TimedLong m_customVal_input;
-  /*!
-   */
-  RTC::OutPort<RTC::TimedLong> m_customVal_inputOut;
   RTC::TimedPoint3D m_position_input;
   /*!
    * - Unit: m

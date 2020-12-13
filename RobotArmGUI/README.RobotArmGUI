@@ -60,26 +60,44 @@ Lang Type:
 ======================================================================
 # <rtc-template block="inport">
 
-	Name:        targetPos_input
+	Name:        button1_input
 	PortNumber:  0
 	Description: 
 	PortType: 
-	DataType:    RTC::TimedPoint3D
+	DataType:    RTC::TimedBoolean
 	MaxOut: 
 	[Data Elements]
 		Name:
 		Type:            
 		Number:          
 		Semantics:       
-		Unit:            m
+		Unit:            
 		Frequency:       
 		Operation Cycle: 
 		RangeLow:
 		RangeHigh:
 		DefaultValue:
 
-	Name:        customVal_input
+	Name:        button2_input
 	PortNumber:  1
+	Description: 
+	PortType: 
+	DataType:    RTC::TimedBoolean
+	MaxOut: 
+	[Data Elements]
+		Name:
+		Type:            
+		Number:          
+		Semantics:       
+		Unit:            
+		Frequency:       
+		Operation Cycle: 
+		RangeLow:
+		RangeHigh:
+		DefaultValue:
+
+	Name:        displayVal_input
+	PortNumber:  2
 	Description: 
 	PortType: 
 	DataType:    RTC::TimedLong
@@ -96,8 +114,26 @@ Lang Type:
 		RangeHigh:
 		DefaultValue:
 
+	Name:        targetPos_input
+	PortNumber:  3
+	Description: 
+	PortType: 
+	DataType:    RTC::TimedPoint3D
+	MaxOut: 
+	[Data Elements]
+		Name:
+		Type:            
+		Number:          
+		Semantics:       
+		Unit:            m
+		Frequency:       
+		Operation Cycle: 
+		RangeLow:
+		RangeHigh:
+		DefaultValue:
+
 	Name:        position_input
-	PortNumber:  2
+	PortNumber:  4
 	Description: 
 	PortType: 
 	DataType:    RTC::TimedPoint3D
@@ -122,7 +158,7 @@ Lang Type:
 ======================================================================
 # <rtc-template block="outport">
 
-	Name:        autoSignal_output
+	Name:        button1_output
 	PortNumber:  0
 	Description: 
 	PortType: 
@@ -140,7 +176,7 @@ Lang Type:
 		RangeHigh:
 		DefaultValue:
 
-	Name:        customSignal_output
+	Name:        button2_output
 	PortNumber:  1
 	Description: 
 	PortType: 
@@ -337,63 +373,23 @@ Lang Type:
 		Range:           
 		Constraint:      
 
-		Name:             showAutoButton
-		Description:     
-		Type:            int
-		DefaultValue:     1
-		Unit:            
-		Range:           
-		Constraint:      
-
-		Name:             showCustomButton
-		Description:     
-		Type:            int
-		DefaultValue:     0
-		Unit:            
-		Range:           
-		Constraint:      
-
-		Name:             custom_name
+		Name:             button1_name
 		Description:     
 		Type:            string
-		DefaultValue:     custom
+		DefaultValue:     Auto
 		Unit:            
 		Range:           
 		Constraint:      
 
-		Name:             custom_alternateOperation
+		Name:             button1_pressName
 		Description:     
-		Type:            int
-		DefaultValue:     0
+		Type:            string
+		DefaultValue:     Running
 		Unit:            
 		Range:           
 		Constraint:      
 
-		Name:             custom_linkWithRightClick
-		Description:     
-		Type:            int
-		DefaultValue:     0
-		Unit:            
-		Range:           
-		Constraint:      
-
-		Name:             custom_pushVal
-		Description:     
-		Type:            int
-		DefaultValue:     1
-		Unit:            
-		Range:           
-		Constraint:      
-
-		Name:             custom_pressVal
-		Description:     
-		Type:            int
-		DefaultValue:     2
-		Unit:            
-		Range:           
-		Constraint:      
-
-		Name:             custom_releaseVal
+		Name:             button1_choicesNum
 		Description:     
 		Type:            int
 		DefaultValue:     3
@@ -401,7 +397,55 @@ Lang Type:
 		Range:           
 		Constraint:      
 
-		Name:             custom_showInputVal
+		Name:             button1_alternateOperation
+		Description:     
+		Type:            int
+		DefaultValue:     1
+		Unit:            
+		Range:           
+		Constraint:      
+
+		Name:             button1_linkWithRightClick
+		Description:     
+		Type:            int
+		DefaultValue:     0
+		Unit:            
+		Range:           
+		Constraint:      
+
+		Name:             button2_name
+		Description:     
+		Type:            string
+		DefaultValue:     none
+		Unit:            
+		Range:           
+		Constraint:      
+
+		Name:             button2_pressName
+		Description:     
+		Type:            string
+		DefaultValue:     pressName
+		Unit:            
+		Range:           
+		Constraint:      
+
+		Name:             button2_choicesNum
+		Description:     
+		Type:            int
+		DefaultValue:     1
+		Unit:            
+		Range:           
+		Constraint:      
+
+		Name:             button2_alternateOperation
+		Description:     
+		Type:            int
+		DefaultValue:     0
+		Unit:            
+		Range:           
+		Constraint:      
+
+		Name:             button2_linkWithRightClick
 		Description:     
 		Type:            int
 		DefaultValue:     0

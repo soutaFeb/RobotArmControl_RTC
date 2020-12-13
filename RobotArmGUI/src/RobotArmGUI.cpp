@@ -13,11 +13,6 @@
 #include <math.h>
 #include <cmath>
 
-//渡された数値をある範囲から別の範囲に変更する関数
-double Map(double value, double start1, double end1, double start2, double end2) {
-    return start2 + (end2 - start2) * ((value - start1) / (end1 - start1));
-}
-
 //２点間距離を求める関数
 double Dist(double x1, double y1, double z1, double x2, double y2, double z2) {
     return sqrt(pow((x1 - x2), 2) + pow(y1 - y2, 2) + pow(z1 - z2, 2));
@@ -66,21 +61,26 @@ bool sideDraggFlag = true;
 double draggDistX = 0.0;//ドラッグした際のマウスポインタと目標円中心の差（x方向）
 double draggDistY = 0.0;//ドラッグした際のマウスポインタと目標円中心の差（y方向）
 
-int autoStatus = 0;
-int maxAutoStatus = 0;
-bool autoClickFlag = true;
-bool autoPush = false;
-int autoX = 0;
-int autoY = 0;
-int autoRadius = 0;
+bool pmouseLEFT = false; //1フレーム前のマウス左ボタンの状態
+bool pmouseRIGHT = false;//1フレーム前のマウス右ボタンの状態
+bool mouseLEFT = false;  //マウス左ボタンの状態
+bool mouseRIGHT = false; //マウス右ボタンの状態
 
-int customOutputStatus = 0;
-bool customClickFlag = true;
-bool customPush = false;
-int customX = 0;
-int customY = 0;
-int customRadius = 0;
-bool customPress = false;//オルタネイト動作用
+int buttonLength[] = { 0, 0 };      //カスタムボタンの表示名の文字数
+int buttonPressLength[] = { 0, 0 }; //カスタムボタンを押した際の表示名の文字数
+char buttonName[2][50];           //カスタムボタンの表示名
+char buttonPressName[2][50];      //カスタムボタンを押した際の表示名
+bool showCustomButton[] = { false,false };
+bool buttonOn[] = { false,false };
+bool buttonHalfPress[] = { false,false };
+bool buttonPress[] = { false,false };
+bool buttonAlternate[] = { false,false };
+bool buttonLinkRightClick[] = { false,false };
+int buttonStatus[] = { 0,0 };
+int maxCustomStatus[] = { 0,0 };
+int buttonX[] = { 0,0 };
+int buttonY[] = { 0,0 };
+int buttonRadius[] = { 0,0 };
 
 double realMag;
 
@@ -116,15 +116,16 @@ static const char* robotarmgui_spec[] =
     "conf.default.accentColor_B", "0",
     "conf.default.backgroundBrightness", "0",
     "conf.default.arcBrightness", "50",
-    "conf.default.showAutoButton", "1",
-    "conf.default.showCustomButton", "0",
-    "conf.default.custom_name", "custom",
-    "conf.default.custom_alternateOperation", "0",
-    "conf.default.custom_linkWithRightClick", "0",
-    "conf.default.custom_pushVal", "1",
-    "conf.default.custom_pressVal", "2",
-    "conf.default.custom_releaseVal", "3",
-    "conf.default.custom_showInputVal", "0",
+    "conf.default.button1_name", "Auto",
+    "conf.default.button1_pressName", "Running",
+    "conf.default.button1_choicesNum", "3",
+    "conf.default.button1_alternateOperation", "1",
+    "conf.default.button1_linkWithRightClick", "0",
+    "conf.default.button2_name", "none",
+    "conf.default.button2_pressName", "pressName",
+    "conf.default.button2_choicesNum", "1",
+    "conf.default.button2_alternateOperation", "0",
+    "conf.default.button2_linkWithRightClick", "0",
 
     // Widget
     "conf.__widget__.upperArmLength", "text",
@@ -143,15 +144,16 @@ static const char* robotarmgui_spec[] =
     "conf.__widget__.accentColor_B", "text",
     "conf.__widget__.backgroundBrightness", "text",
     "conf.__widget__.arcBrightness", "text",
-    "conf.__widget__.showAutoButton", "text",
-    "conf.__widget__.showCustomButton", "text",
-    "conf.__widget__.custom_name", "text",
-    "conf.__widget__.custom_alternateOperation", "text",
-    "conf.__widget__.custom_linkWithRightClick", "text",
-    "conf.__widget__.custom_pushVal", "text",
-    "conf.__widget__.custom_pressVal", "text",
-    "conf.__widget__.custom_releaseVal", "text",
-    "conf.__widget__.custom_showInputVal", "text",
+    "conf.__widget__.button1_name", "text",
+    "conf.__widget__.button1_pressName", "text",
+    "conf.__widget__.button1_choicesNum", "text",
+    "conf.__widget__.button1_alternateOperation", "text",
+    "conf.__widget__.button1_linkWithRightClick", "text",
+    "conf.__widget__.button2_name", "text",
+    "conf.__widget__.button2_pressName", "text",
+    "conf.__widget__.button2_choicesNum", "text",
+    "conf.__widget__.button2_alternateOperation", "text",
+    "conf.__widget__.button2_linkWithRightClick", "text",
     // Constraints
 
     "conf.__type__.upperArmLength", "double",
@@ -170,15 +172,16 @@ static const char* robotarmgui_spec[] =
     "conf.__type__.accentColor_B", "int",
     "conf.__type__.backgroundBrightness", "int",
     "conf.__type__.arcBrightness", "int",
-    "conf.__type__.showAutoButton", "int",
-    "conf.__type__.showCustomButton", "int",
-    "conf.__type__.custom_name", "string",
-    "conf.__type__.custom_alternateOperation", "int",
-    "conf.__type__.custom_linkWithRightClick", "int",
-    "conf.__type__.custom_pushVal", "int",
-    "conf.__type__.custom_pressVal", "int",
-    "conf.__type__.custom_releaseVal", "int",
-    "conf.__type__.custom_showInputVal", "int",
+    "conf.__type__.button1_name", "string",
+    "conf.__type__.button1_pressName", "string",
+    "conf.__type__.button1_choicesNum", "int",
+    "conf.__type__.button1_alternateOperation", "int",
+    "conf.__type__.button1_linkWithRightClick", "int",
+    "conf.__type__.button2_name", "string",
+    "conf.__type__.button2_pressName", "string",
+    "conf.__type__.button2_choicesNum", "int",
+    "conf.__type__.button2_alternateOperation", "int",
+    "conf.__type__.button2_linkWithRightClick", "int",
 
     ""
   };
@@ -191,11 +194,13 @@ static const char* robotarmgui_spec[] =
 RobotArmGUI::RobotArmGUI(RTC::Manager* manager)
     // <rtc-template block="initializer">
   : RTC::DataFlowComponentBase(manager),
+    m_button1_inputIn("button1_input", m_button1_input),
+    m_button2_inputIn("button2_input", m_button2_input),
+    m_displayVal_inputIn("displayVal_input", m_displayVal_input),
     m_targetPos_inputIn("targetPos_input", m_targetPos_input),
-    m_customVal_inputIn("customVal_input", m_customVal_input),
     m_position_inputIn("position_input", m_position_input),
-    m_autoSignal_outputOut("autoSignal_output", m_autoSignal_output),
-    m_customSignal_outputOut("customSignal_output", m_customSignal_output),
+    m_button1_outputOut("button1_output", m_button1_output),
+    m_button2_outputOut("button2_output", m_button2_output),
     m_angle_outputOut("angle_output", m_angle_output),
     m_targetPos_outputOut("targetPos_output", m_targetPos_output)
 
@@ -217,14 +222,16 @@ RobotArmGUI::RobotArmGUI(RTC::Manager* manager)
     RobotArmGUI::m_accentColor_B = 0;
     RobotArmGUI::m_backgroundBrightness = 0;
     RobotArmGUI::m_arcBrightness = 0;
-    RobotArmGUI::m_showCustomButton = 0;
-    RobotArmGUI::m_custom_name = "";
-    RobotArmGUI::m_custom_alternateOperation = 0;
-    RobotArmGUI::m_custom_linkWithRightClick = 0;
-    RobotArmGUI::m_custom_pushVal = 0;
-    RobotArmGUI::m_custom_pressVal = 0;
-    RobotArmGUI::m_custom_releaseVal = 0;
-    RobotArmGUI::m_custom_showInputVal = 0;
+    RobotArmGUI::m_button1_name = "";
+    RobotArmGUI::m_button1_pressName = "";
+    RobotArmGUI::m_button1_choicesNum = 0;
+    RobotArmGUI::m_button1_alternateOperation = 0;
+    RobotArmGUI::m_button1_linkWithRightClick = 0;
+    RobotArmGUI::m_button2_name = "";
+    RobotArmGUI::m_button2_pressName = "";
+    RobotArmGUI::m_button2_choicesNum = 0;
+    RobotArmGUI::m_button2_alternateOperation = 0;
+    RobotArmGUI::m_button2_linkWithRightClick = 0;
 }
 
 /*!
@@ -241,13 +248,15 @@ RTC::ReturnCode_t RobotArmGUI::onInitialize()
   // Registration: InPort/OutPort/Service
   // <rtc-template block="registration">
   // Set InPort buffers
+  addInPort("button1_input", m_button1_inputIn);
+  addInPort("button2_input", m_button2_inputIn);
+  addInPort("displayVal_input", m_displayVal_inputIn);
   addInPort("targetPos_input", m_targetPos_inputIn);
-  addInPort("customVal_input", m_customVal_inputIn);
   addInPort("position_input", m_position_inputIn);
   
   // Set OutPort buffer
-  addOutPort("autoSignal_output", m_autoSignal_outputOut);
-  addOutPort("customSignal_output", m_customSignal_outputOut);
+  addOutPort("button1_output", m_button1_outputOut);
+  addOutPort("button2_output", m_button2_outputOut);
   addOutPort("angle_output", m_angle_outputOut);
   addOutPort("targetPos_output", m_targetPos_outputOut);
   
@@ -277,19 +286,20 @@ RTC::ReturnCode_t RobotArmGUI::onInitialize()
   bindParameter("accentColor_B", m_accentColor_B, "0");
   bindParameter("backgroundBrightness", m_backgroundBrightness, "0");
   bindParameter("arcBrightness", m_arcBrightness, "50");
-  bindParameter("showAutoButton", m_showAutoButton, "1");
-  bindParameter("showCustomButton", m_showCustomButton, "0");
-  bindParameter("custom_name", m_custom_name, "custom");
-  bindParameter("custom_alternateOperation", m_custom_alternateOperation, "0");
-  bindParameter("custom_linkWithRightClick", m_custom_linkWithRightClick, "0");
-  bindParameter("custom_pushVal", m_custom_pushVal, "1");
-  bindParameter("custom_pressVal", m_custom_pressVal, "2");
-  bindParameter("custom_releaseVal", m_custom_releaseVal, "3");
-  bindParameter("custom_showInputVal", m_custom_showInputVal, "0");
+  bindParameter("button1_name", m_button1_name, "Auto");
+  bindParameter("button1_pressName", m_button1_pressName, "Running");
+  bindParameter("button1_choicesNum", m_button1_choicesNum, "3");
+  bindParameter("button1_alternateOperation", m_button1_alternateOperation, "1");
+  bindParameter("button1_linkWithRightClick", m_button1_linkWithRightClick, "0");
+  bindParameter("button2_name", m_button2_name, "none");
+  bindParameter("button2_pressName", m_button2_pressName, "pressName");
+  bindParameter("button2_choicesNum", m_button2_choicesNum, "1");
+  bindParameter("button2_alternateOperation", m_button2_alternateOperation, "0");
+  bindParameter("button2_linkWithRightClick", m_button2_linkWithRightClick, "0");
   // </rtc-template>
-
-  std::cout << "RobotArmGUI ready!" << std::endl;
   
+  std::cout << "RobotArmGUI ready!" << std::endl;
+
   return RTC::RTC_OK;
 }
 
@@ -338,13 +348,45 @@ RTC::ReturnCode_t RobotArmGUI::onActivated(RTC::UniqueId ec_id)
     side0x = windowWidth * 0.75;
     side0y = sideViewHeight - jointSize * 0.5;
 
-    autoX = 48;
-    autoY = windowHeight - arcRadius - 2;
-    autoRadius = 35;
+    buttonX[0] = 48;
+    buttonY[0] = windowHeight - arcRadius - 2;
+    buttonRadius[0] = 35;
+    maxCustomStatus[0] = m_button1_choicesNum;
+    buttonAlternate[0] = m_button1_alternateOperation;
+    buttonLinkRightClick[0] = m_button1_linkWithRightClick;
+    buttonX[1] = buttonX[0] + 83;
+    buttonY[1] = buttonY[0];
+    buttonRadius[1] = 35;
+    maxCustomStatus[1] = m_button2_choicesNum;
+    buttonAlternate[1] = m_button2_alternateOperation;
+    buttonLinkRightClick[1] = m_button2_linkWithRightClick;
+    for (int i = 0; i < 50; i++) {
+        if (i < m_button1_name.length()) {
+            buttonName[0][i] = m_button1_name[i];
+            buttonLength[0]++;
+        }
+        else buttonName[0][i] = NULL;
 
-    customX = autoX + 83;
-    customY = windowHeight - arcRadius - 2;
-    customRadius = 35;
+        if (i < m_button1_pressName.length()) {
+            buttonPressName[0][i] = m_button1_pressName[i];
+            buttonPressLength[0]++;
+        }
+        else buttonPressName[0][i] = NULL;
+
+        if (i < m_button2_name.length()) {
+            buttonName[1][i] = m_button2_name[i];
+            buttonLength[1]++;
+        }
+        else buttonName[1][i] = NULL;
+
+        if (i < m_button2_pressName.length()) {
+            buttonPressName[1][i] = m_button2_pressName[i];
+            buttonPressLength[1]++;
+        }
+        else buttonPressName[1][i] = NULL;
+    }
+
+    m_displayVal_input.data = 0;
 
     //加速度制御コンポーネントに手先の初期座標を送る
     m_targetPos_output.data.x = 0.001 * targetP2x * realMag;
@@ -352,27 +394,12 @@ RTC::ReturnCode_t RobotArmGUI::onActivated(RTC::UniqueId ec_id)
     m_targetPos_output.data.z = 0.001 * targetP2z * realMag;
     m_targetPos_outputOut.write();
 
-    m_autoSignal_output.data = 0;
-    m_autoSignal_outputOut.write();
-
-    //自動制御コンポーネントからデータを受け取る
-    if (m_showAutoButton > 0) {
-        while (1) {
-            if (m_targetPos_inputIn.isNew()) {
-                m_targetPos_inputIn.read();
-                maxAutoStatus = int(m_targetPos_input.data.x);
-                break;
-            }
-        }
-    }
-
     SetMainWindowText("RobotArmGUI");//タイトルバーの名前を設定
     SetBackgroundColor(m_backgroundBrightness, m_backgroundBrightness, m_backgroundBrightness);
     ChangeWindowMode(TRUE);//非全画面にセット
     SetGraphMode(windowWidth, windowHeight, 32);//画面サイズ指定
     SetOutApplicationLogValidFlag(FALSE);//Log.txtを生成しないように設定
     SetAlwaysRunFlag(TRUE);//ウィンドウが非アクティブ時でも画面が更新されるようにする
-
 
     ChangeFontType(DX_FONTTYPE_ANTIALIASING);
 
@@ -384,6 +411,8 @@ RTC::ReturnCode_t RobotArmGUI::onActivated(RTC::UniqueId ec_id)
 
 RTC::ReturnCode_t RobotArmGUI::onDeactivated(RTC::UniqueId ec_id)
 {
+    DxLib_End();
+
   return RTC::RTC_OK;
 }
 
@@ -393,6 +422,7 @@ RTC::ReturnCode_t RobotArmGUI::onExecute(RTC::UniqueId ec_id)
     ClearDrawScreen();//裏画面消す
     SetDrawScreen(DX_SCREEN_BACK);//描画先を裏画面に
 
+    //入力--------------------------------------------------
 
     //加速度制御コンポーネントからデータを受け取る
     if (m_position_inputIn.isNew()) {
@@ -411,23 +441,33 @@ RTC::ReturnCode_t RobotArmGUI::onExecute(RTC::UniqueId ec_id)
     //CUIコンポーネントまたは自動制御コンポーネントからデータを受け取る
     if (m_targetPos_inputIn.isNew()) {
         m_targetPos_inputIn.read();
-        if (m_targetPos_input.data.x > 999 && m_targetPos_input.data.y > 999 && m_targetPos_input.data.z > 999) {
-            m_autoSignal_output.data = 0;
-        }
-        else {
-            targetP2x = (1000 * m_targetPos_input.data.x) / realMag + windowWidth * 0.5;
-            targetP2y = windowHeight - (1000 * m_targetPos_input.data.y) / realMag;
-            targetP2z = (1000 * m_targetPos_input.data.z) / realMag;
-        }
+        targetP2x = (1000 * m_targetPos_input.data.x) / realMag + windowWidth * 0.5;
+        targetP2y = windowHeight - (1000 * m_targetPos_input.data.y) / realMag;
+        targetP2z = (1000 * m_targetPos_input.data.z) / realMag;
     }
+
+    //button1(or2)_inputデータポートからカスタムボタンの状態を操作
+    if (m_button1_inputIn.isNew()) {
+        m_button1_inputIn.read();
+        if (m_button1_input.data == true)buttonPress[0] = true;
+        else buttonPress[0] = false;
+    }
+    if (m_button2_inputIn.isNew()) {
+        m_button2_inputIn.read();
+        if (m_button2_input.data == true)buttonPress[1] = true;
+        else buttonPress[1] = false;
+    }
+
 
     GetMousePoint(&mouseX, &mouseY);
     mouseWheel = GetMouseWheelRotVol();
     int mouseInput = GetMouseInput();
-    bool mouseLEFT = false;
-    bool mouseRIGHT = false;
+    pmouseLEFT = mouseLEFT;
+    pmouseRIGHT = mouseRIGHT;
     if (mouseInput & MOUSE_INPUT_LEFT)mouseLEFT = true;
+    else mouseLEFT = false;
     if (mouseInput & MOUSE_INPUT_RIGHT)mouseRIGHT = true;
+    else mouseRIGHT = false;
 
     //ドラッグ処理
     if (topDragg) {//上視点のドラッグ処理
@@ -484,7 +524,7 @@ RTC::ReturnCode_t RobotArmGUI::onExecute(RTC::UniqueId ec_id)
         }
         else p2y = windowHeight;
     }
-    if (Dist(mouseX, mouseY, 0, autoX, autoY, 0) > autoRadius) {//マウスポインタがAutoボタンの上にないときは、マウスホイールでz座標を操作出来る
+    if (!buttonOn[0] && !buttonOn[1]) {//マウスポインタがカスタムボタンの上にないときは、マウスホイールでz座標を操作出来る
         targetP2z -= mouseWheel * m_wheelRate / realMag * ((double)m_switchWheelDirection * (-2) + 1);
     }
     double maxTargetP2z = sqrt(pow((upperLength + lowerLength), 2) - pow(sqrt(pow(targetP2x - windowWidth * 0.5, 2) + pow(windowHeight - targetP2y, 2)), 2));
@@ -516,144 +556,82 @@ RTC::ReturnCode_t RobotArmGUI::onExecute(RTC::UniqueId ec_id)
     int accentColor = GetColor(m_accentColor_R, m_accentColor_G, m_accentColor_B);
     int backgroundColor = GetColor(m_backgroundBrightness, m_backgroundBrightness, m_backgroundBrightness);
     int arcColor = GetColor(m_arcBrightness, m_arcBrightness, m_arcBrightness);
+    int halfColor = GetColor(int(m_accentColor_R * 0.5), int(m_accentColor_G * 0.5), int(m_accentColor_B * 0.5));
 
-    //Autoボタン
-    if (m_showAutoButton > 0) {
-        bool autoMouseOn = false;
-        if (Dist(mouseX, mouseY, 0, double(autoX), double(autoY), 0) < autoRadius)autoMouseOn = true;
-        if (autoMouseOn) {
-            if (mouseLEFT && autoClickFlag) {//押した瞬間
-                autoPush = true;
-                //autoClickFlag = false;
+    //カスタムボタン
+    for (int i = 0; i < 2; i++) {
+        if (buttonName[i][0] != 'n' || buttonName[i][1] != 'o' || buttonName[i][2] != 'n' || buttonName[i][3] != 'e') {
+            if (Dist(mouseX, mouseY, 0, double(buttonX[i]), double(buttonY[i]), 0) < buttonRadius[i])buttonOn[i] = true;
+            else buttonOn[i] = false;
+
+            if (!buttonHalfPress[i] && !buttonPress[i]) {//ボタンが押されてないとき
+                if (buttonOn[i]) {//マウスカーソルがボタンの上にあるならホイールで送信値を選択できる
+                    buttonStatus[i] -= mouseWheel;
+                    if (buttonStatus[i] < 1)buttonStatus[i] = 1;
+                    if (buttonStatus[i] > maxCustomStatus[i])buttonStatus[i] = maxCustomStatus[i];
+                }
+                else buttonStatus[i] = 0;//マウスカーソルがボタン外にあるなら送信値をリセット
             }
-            if (mouseInput == 0 && autoPush) {//離した瞬間
-                if (m_autoSignal_output.data == 0)m_autoSignal_output.data = autoStatus;
-                else m_autoSignal_output.data = 0;
+
+            if (buttonLinkRightClick[i]) {//右クリックと同期する場合
+                if (!pmouseRIGHT && mouseRIGHT)buttonHalfPress[i] = true;
+                if (!mouseRIGHT && buttonHalfPress[i]) {
+                    if (buttonPress[i])buttonPress[i] = false;
+                    else buttonPress[i] = true;
+                }
+                if (!mouseRIGHT) {
+                    buttonHalfPress[i] = false;
+                }
             }
-            if (m_autoSignal_output.data == 0) {
-                autoStatus -= mouseWheel;
-                if (autoStatus < 1)autoStatus = 1;
-                if (autoStatus > maxAutoStatus)autoStatus = maxAutoStatus;
+            else {//通常時（左クリック使用時）
+                if (!pmouseLEFT && mouseLEFT && buttonOn[i])buttonHalfPress[i] = true;
+                if (!mouseLEFT && buttonOn[i] && buttonHalfPress[i]) {
+                    if (buttonPress[i])buttonPress[i] = false;
+                    else buttonPress[i] = true;
+                }
+                if (!mouseLEFT) {
+                    buttonHalfPress[i] = false;
+                }
             }
-        }
-        else if (!autoPush && m_autoSignal_output.data == 0)autoStatus = 1;
-        if (mouseLEFT)autoClickFlag = false;
-        else {
-            autoClickFlag = true;
-            autoPush = false;
-        }
-        if (autoPush)DrawCircle(autoX, autoY, autoRadius, GetColor(int(m_accentColor_R * 0.5), int(m_accentColor_G * 0.5), int(m_accentColor_B * 0.5)), true);//Autoボタン塗りつぶし
-        if (m_autoSignal_output.data > 0) {
-            if (!autoPush)DrawCircle(autoX, autoY, autoRadius, accentColor, true);//Autoボタン塗りつぶし
-            SetFontSize(12);
-            DrawFormatString(autoX - 24, autoY - 13, characterColor, "Running");
-            SetFontSize(20);
-            DrawFormatString(autoX - 24, autoY - 2, characterColor, "data%d", m_autoSignal_output.data);
-        }
-        else {
-            if (autoMouseOn || autoPush) {
-                SetFontSize(12);
-                DrawFormatString(autoX - 24, autoY - 13, characterColor, "Select");
-                SetFontSize(20);
-                DrawFormatString(autoX - 24, autoY - 2, characterColor, "data%d", autoStatus);
+            if (!buttonAlternate[i])buttonPress[i] = buttonHalfPress[i];//モーメンタリ動作の場合
+
+            //カスタムボタン描画
+            if (buttonPress[i]) {
+                DrawCircle(buttonX[i], buttonY[i], buttonRadius[i], accentColor, true);//押された状態のカスタムボタン塗りつぶし
+                if (buttonHalfPress[i] && buttonAlternate[i])DrawCircle(buttonX[i], buttonY[i], buttonRadius[i], halfColor, true);//半押し状態のカスタムボタン塗りつぶし ※モーメンタリ動作の時は半押し状態は無し
+                SetFontSize(int(80 / buttonPressLength[i]));
+                DrawFormatString(buttonX[i] - 24, buttonY[i] - 8 + int((20 - 80 / buttonPressLength[i]) * 0.5), characterColor, _T(buttonPressName[i]));
             }
             else {
+                if (buttonHalfPress[i])DrawCircle(buttonX[i], buttonY[i], buttonRadius[i], halfColor, true);//カスタムボタン塗りつぶし
+                SetFontSize(int(80 / buttonLength[i]));
+                DrawFormatString(buttonX[i] - 24, buttonY[i] - 8 + int((20 - 80 / buttonLength[i]) * 0.5), characterColor, _T(buttonName[i]));
+            }
+            DrawCircleAA(float(buttonX[i]), float(buttonY[i]), float(buttonRadius[i]), 64, characterColor, false, 2.0);//カスタムボタン枠線
+            if (buttonStatus[i] > 0 && maxCustomStatus[i] > 1) {
+                DrawCircleAA(float(buttonX[i]), float(buttonY[i] + buttonRadius[i] - 5), float(buttonRadius[i] * 0.4), 32, characterColor, true, 2.0);
                 SetFontSize(20);
-                DrawFormatString(autoX - 20, autoY - 8, characterColor, "Auto");
+                DrawFormatString(buttonX[i] - 5, buttonY[i] + buttonRadius[i] - 13, backgroundColor, "%d", buttonStatus[i]);
             }
         }
-        DrawCircleAA(float(autoX), float(autoY), float(autoRadius), 64, characterColor, false, 2.0);//Autoボタン枠線
     }
+    if (buttonPress[0])m_button1_output.data = buttonStatus[0];
+    else m_button1_output.data = 0;
+    if (buttonPress[1])m_button2_output.data = buttonStatus[1];
+    else m_button2_output.data = 0;
 
-    //Customボタン
-    if (m_showCustomButton == 1) {
-        if (customPush || customPress)m_customSignal_output.data = m_custom_pressVal;//押されているとき
-        else m_customSignal_output.data = m_custom_pressVal;
-        bool customMouseOn = false;
-        if (Dist(mouseX, mouseY, 0, double(customX), double(customY), 0) < customRadius)customMouseOn = true;
-        if (m_custom_alternateOperation == 0) {//モーメンタリ動作スイッチ
-            if (m_custom_linkWithRightClick == 1) {//右クリックと同期
-                if (mouseRIGHT && customClickFlag) {//押した瞬間
-                    customPush = true;
-                    //customClickFlag = false;
-                    m_customSignal_output.data = m_custom_pushVal;
-                }
-                if (mouseInput == 0 && customPush) {//離した瞬間
-                    m_customSignal_output.data = m_custom_releaseVal;
-                }
-            }
-            else {//右クリックと同期しない
-                if (customMouseOn) {
-                    if (mouseLEFT && customClickFlag) {//押した瞬間
-                        customPush = true;
-                        //customClickFlag = false;
-                        m_customSignal_output.data = m_custom_pushVal;
-                    }
-                    if (mouseInput == 0 && customPush) {//離した瞬間
-                        m_customSignal_output.data = m_custom_releaseVal;
-                    }
-                }
-            }
-            if (mouseRIGHT)customClickFlag = false;
-            else {
-                customClickFlag = true;
-                customPush = false;
-            }
-        }
-        if (m_custom_alternateOperation == 1) {//オルタネイト動作スイッチ
-            if (m_custom_linkWithRightClick == 1) {//右クリックと同期
-                if (mouseRIGHT && customClickFlag) {//押した瞬間
-                    customPush = true;
-                    //customClickFlag = false;
-                    m_customSignal_output.data = m_custom_pushVal;
-                }
-                if (mouseInput == 0 && customPush) {//離した瞬間
-                    m_customSignal_output.data = m_custom_releaseVal;
-                    customPush = false;
-                    if (customPress)customPress = false;
-                    else customPress = true;
-                }
-            }
-            else {//右クリックと同期しない
-                if (customMouseOn) {
-                    if (mouseLEFT && customClickFlag) {//押した瞬間
-                        customPush = true;
-                        //customClickFlag = false;
-                        m_customSignal_output.data = m_custom_pushVal;
-                    }
-                    if (mouseInput == 0 && customPush) {//離した瞬間
-                        m_customSignal_output.data = m_custom_releaseVal;
-                        customPush = false;
-                        if (customPress)customPress = false;
-                        else customPress = true;
-                    }
-                }
-            }
-            if (mouseRIGHT)customClickFlag = false;
-            else customClickFlag = true;
-        }
-
-        if (customPush || customPress)DrawCircle(customX, customY, customRadius, accentColor, true);//Customボタン塗りつぶし
-        else DrawCircle(customX, customY, customRadius, backgroundColor, true);//Customボタン塗りつぶし
-        if (m_custom_showInputVal) {
-            SetFontSize(15);
-            DrawFormatString(customX - 15, customY + 10, characterColor, " %d", autoStatus);
-        }
-        char name[50] = {};
-        for (int i = 0; i < 50; i++) {
-            if (i < m_custom_name.length())name[i] = m_custom_name[i];
-            else name[i] = NULL;
-        }
-        SetFontSize(18);
-        DrawFormatString(customX - 30, customY - 8, characterColor, _T(name));
-        DrawCircleAA(float(customX), float(customY), float(customRadius), 64, characterColor, false, 2.0);//Autoボタン枠線
+    //dhisplayVal_inputに入力があれば値を表示
+    if (m_displayVal_inputIn.isNew()) {
+        m_displayVal_inputIn.read();
+        DrawRoundRectAA(float(windowWidth - 220), float(m_showSideView * (sideViewHeight + borderHeight) + 13), float(windowWidth - 140), float(m_showSideView * (sideViewHeight + borderHeight) + 53), 5.0, 5.0, 16, characterColor, true);
+        SetFontSize(20);
+        DrawFormatString(windowWidth - 210, m_showSideView * (sideViewHeight + borderHeight) + 23, backgroundColor, "%4d", m_displayVal_input.data);
     }
-
-    //自動制御コンポーネントにデータ番号を送る
-    m_autoSignal_outputOut.write();
+    //出力--------------------------------------------------
 
     //Costomボタンの状態を送る
-    m_customSignal_outputOut.write();
+    m_button1_outputOut.write();
+    m_button2_outputOut.write();
 
     //加速度制御コンポーネントに手先の目標座標と現在の座標を送る
     m_targetPos_output.data.x = 0.001 * targetP2x * realMag;
