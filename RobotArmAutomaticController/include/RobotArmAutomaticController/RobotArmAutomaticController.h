@@ -227,6 +227,10 @@ class RobotArmAutomaticController
 
   // DataOutPort declaration
   // <rtc-template block="outport_declare">
+  RTC::TimedBoolean m_buttonState_output;
+  /*!
+   */
+  RTC::OutPort<RTC::TimedBoolean> m_buttonState_outputOut;
   RTC::TimedPoint3D m_targetPos_output;
   /*!
    * - Unit: m

@@ -36,6 +36,7 @@ RobotArmAutomaticControllerTest::RobotArmAutomaticControllerTest(RTC::Manager* m
     // <rtc-template block="initializer">
   : RTC::DataFlowComponentBase(manager),
     m_autoSignal_inputIn("autoSignal_input", m_autoSignal_input),
+    m_buttonState_outputOut("buttonState_output", m_buttonState_output),
     m_targetPos_outputOut("targetPos_output", m_targetPos_output)
 
     // </rtc-template>
@@ -56,6 +57,7 @@ RTC::ReturnCode_t RobotArmAutomaticControllerTest::onInitialize()
   // Registration: InPort/OutPort/Service
   // <rtc-template block="registration">
   // Set InPort buffers
+  addInPort("buttonState_output", m_buttonState_outputIn);
   addInPort("targetPos_output", m_targetPos_outputIn);
   
   // Set OutPort buffer

@@ -50,6 +50,7 @@ RobotArmAutomaticController::RobotArmAutomaticController(RTC::Manager* manager)
     // <rtc-template block="initializer">
   : RTC::DataFlowComponentBase(manager),
     m_autoSignal_inputIn("autoSignal_input", m_autoSignal_input),
+    m_buttonState_outputOut("buttonState_output", m_buttonState_output),
     m_targetPos_outputOut("targetPos_output", m_targetPos_output)
 
     // </rtc-template>
@@ -73,6 +74,7 @@ RTC::ReturnCode_t RobotArmAutomaticController::onInitialize()
   addInPort("autoSignal_input", m_autoSignal_inputIn);
   
   // Set OutPort buffer
+  addOutPort("buttonState_output", m_buttonState_outputOut);
   addOutPort("targetPos_output", m_targetPos_outputOut);
   
   // Set service provider to Ports
@@ -115,8 +117,6 @@ RTC::ReturnCode_t RobotArmAutomaticController::onShutdown(RTC::UniqueId ec_id)
 
 RTC::ReturnCode_t RobotArmAutomaticController::onActivated(RTC::UniqueId ec_id)
 {
-    m_targetPos_output.data.x = 3;//データファイルの数をGUIコンポーネントに送る
-    m_targetPos_outputOut.write();
 
     ifstream file1("data1.dat");
     while (file1 >> value[0][allNum[0]]) {// スペースで区切られた値を読み込む
@@ -167,12 +167,12 @@ RTC::ReturnCode_t RobotArmAutomaticController::onExecute(RTC::UniqueId ec_id)
                 sendNum++;
             }
             timeCount++;
-            if (timeCount >= moveInterval[autoSignal - 1])timeCount = 0;
-            if (sendNum > dataNum[autoSignal - 1]) {
-                m_targetPos_output.data.x = 1000;
-                m_targetPos_output.data.y = 1000;
-                m_targetPos_output.data.z = 1000;
+            if (sendNum > dataNum[autoSignal - 1] && timeCount >= moveInterval[autoSignal - 1]) {
+                m_buttonState_output.data = false;
+                std::cout << "data"<< autoSignal <<" finish!" << std::endl;
+                m_buttonState_outputOut.write();
             }
+            if (timeCount >= moveInterval[autoSignal - 1])timeCount = 0;
             m_targetPos_outputOut.write();
         }
         else {

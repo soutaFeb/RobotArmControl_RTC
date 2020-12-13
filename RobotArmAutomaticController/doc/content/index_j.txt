@@ -109,6 +109,7 @@ RobotArmAutomaticControllerは ``RobotArmAutomaticControllerComp`` を実行（ 
 ポート名        ポート型    データ型                       意味
 =============== =========== ============================== ====
 autoSignal_input InPort      RTC::TimedLong                 
+buttonState_output OutPort     RTC::TimedBoolean              
 targetPos_output OutPort     RTC::TimedPoint3D              
 =============== =========== ============================== ====
 

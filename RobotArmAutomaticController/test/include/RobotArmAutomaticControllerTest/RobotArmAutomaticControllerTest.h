@@ -233,6 +233,10 @@ class RobotArmAutomaticControllerTest
 
   // DataInPort declaration
   // <rtc-template block="inport_declare">
+  RTC::TimedBoolean m_buttonState_output;
+  /*!
+   */
+  RTC::InPort<RTC::TimedBoolean> m_buttonState_outputIn;
   RTC::TimedPoint3D m_targetPos_output;
   /*!
    * - Unit: m

@@ -117,6 +117,7 @@ The ports provided by the component are described below:
 Name            Type        Data type                      Purpose
 =============== =========== ============================== =======
 autoSignal_input InPort      RTC::TimedLong                 
+buttonState_output OutPort     RTC::TimedBoolean              
 targetPos_output OutPort     RTC::TimedPoint3D              
 =============== =========== ============================== =======
 

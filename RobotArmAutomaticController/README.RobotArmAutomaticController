@@ -86,8 +86,26 @@ Lang Type:
 ======================================================================
 # <rtc-template block="outport">
 
-	Name:        targetPos_output
+	Name:        buttonState_output
 	PortNumber:  0
+	Description: 
+	PortType: 
+	DataType:    RTC::TimedBoolean
+	MaxOut: 
+	[Data Elements]
+		Name:
+		Type:            
+		Number:          
+		Semantics:       
+		Unit:            
+		Frequency:       
+		Operation Cycle: 
+		RangeLow:
+		RangeHigh:
+		DefaultValue:
+
+	Name:        targetPos_output
+	PortNumber:  1
 	Description: 
 	PortType: 
 	DataType:    RTC::TimedPoint3D
