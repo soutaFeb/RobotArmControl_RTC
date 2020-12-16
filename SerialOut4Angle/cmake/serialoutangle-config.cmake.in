@@ -1,0 +1,54 @@
+# SerialOutAngle CMake config file
+#
+# This file sets the following variables:
+# SerialOutAngle_FOUND - Always TRUE.
+# SerialOutAngle_INCLUDE_DIRS - Directories containing the SerialOutAngle include files.
+# SerialOutAngle_IDL_DIRS - Directories containing the SerialOutAngle IDL files.
+# SerialOutAngle_LIBRARIES - Libraries needed to use SerialOutAngle.
+# SerialOutAngle_DEFINITIONS - Compiler flags for SerialOutAngle.
+# SerialOutAngle_VERSION - The version of SerialOutAngle found.
+# SerialOutAngle_VERSION_MAJOR - The major version of SerialOutAngle found.
+# SerialOutAngle_VERSION_MINOR - The minor version of SerialOutAngle found.
+# SerialOutAngle_VERSION_REVISION - The revision version of SerialOutAngle found.
+# SerialOutAngle_VERSION_CANDIDATE - The candidate version of SerialOutAngle found.
+
+message(STATUS "Found SerialOutAngle-@PROJECT_VERSION@")
+set(SerialOutAngle_FOUND TRUE)
+
+find_package(<dependency> REQUIRED)
+
+#set(SerialOutAngle_INCLUDE_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@"
+#    ${<dependency>_INCLUDE_DIRS}
+#    )
+#
+#set(SerialOutAngle_IDL_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@/idl")
+set(SerialOutAngle_INCLUDE_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@"
+    ${<dependency>_INCLUDE_DIRS}
+    )
+set(SerialOutAngle_IDL_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@/idl")
+
+
+if(WIN32)
+    set(SerialOutAngle_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_STATIC_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+else(WIN32)
+    set(SerialOutAngle_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_SHARED_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+endif(WIN32)
+
+set(SerialOutAngle_DEFINITIONS ${<dependency>_DEFINITIONS})
+
+set(SerialOutAngle_VERSION @PROJECT_VERSION@)
+set(SerialOutAngle_VERSION_MAJOR @PROJECT_VERSION_MAJOR@)
+set(SerialOutAngle_VERSION_MINOR @PROJECT_VERSION_MINOR@)
+set(SerialOutAngle_VERSION_REVISION @PROJECT_VERSION_REVISION@)
+set(SerialOutAngle_VERSION_CANDIDATE @PROJECT_VERSION_CANDIDATE@)
+
